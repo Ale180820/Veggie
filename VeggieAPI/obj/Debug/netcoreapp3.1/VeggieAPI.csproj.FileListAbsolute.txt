@@ -1,0 +1,8 @@
+C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
+C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\VeggieBack.dll
+C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.csprojAssemblyReference.cache
+C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.AssemblyInfoInputs.cache
+C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.AssemblyInfo.cs
+C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.RazorTargetAssemblyInfo.cache
