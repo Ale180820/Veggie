@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "d5macli3bi5fRsppci99udZkAe2Guu9XOhJo7JaYjWh/jEAhrLzYr3FqhHDMldY43QiRcyKMUf1JD0v1eUsi0w==",
+  "dgSpecHash": "WuspV2PFq65XE3qaNsWaGdh2in3M5f7KrklEyHIrfwSSnh314iUPC6h64WFS+JfIvXVE50AVrql26qk9imkqOQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\victo\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.0\\microsoft.aspnetcore.http.features.5.0.0.nupkg.sha512",
+    "C:\\Users\\victo\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\victo\\.nuget\\packages\\system.io.pipelines\\5.0.0\\system.io.pipelines.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
