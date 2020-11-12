@@ -1,33 +1,11 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {
-      "VeggieAPI/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "compile": {
-          "bin/placeholder/VeggieAPI.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/VeggieAPI.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
-      }
-    }
+    ".NETCoreApp,Version=v3.1": {}
   },
-  "libraries": {
-    "VeggieAPI/1.0.0": {
-      "type": "project",
-      "path": "../VeggieAPI/VeggieAPI.csproj",
-      "msbuildProject": "../VeggieAPI/VeggieAPI.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": [
-      "VeggieAPI >= 1.0.0"
-    ]
+    ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
     "C:\\Users\\victo\\.nuget\\packages\\": {},
@@ -36,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
-      "projectName": "Veggie",
-      "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
+      "projectUniqueName": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
+      "projectName": "VeggieBack",
+      "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
       "packagesPath": "C:\\Users\\victo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\obj\\",
+      "outputPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -59,11 +37,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {
-            "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
-              "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -85,9 +59,6 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
-          "Microsoft.AspNetCore.App": {
-            "privateAssets": "none"
-          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
