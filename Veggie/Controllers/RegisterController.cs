@@ -31,7 +31,7 @@ namespace Veggie.Controllers
             }
         }
 
-
+        //Construye el objeto con lo que se encuentra en los componentes
         public User constructObject(IFormCollection collection) {
             var newUser = new User {
                 username = collection["username"],
