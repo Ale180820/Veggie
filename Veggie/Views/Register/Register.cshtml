@@ -15,33 +15,36 @@
                         <div class="brand-wrapper">
                             <img src="~/assets/img/Logo.png" alt="logo" class="logo">
                         </div>
-                    <form action="#!">
-                        <div class="form-group">
-                            <label for="username" class="sr-only">Nombre de usuario</label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Nombre de usuario">
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="sr-only">Nombre</label>
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Nombre">
-                        </div>
-                        <div class="form-group">
-                            <label for="lastname" class="sr-only">Apellido</label>
-                            <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Apellido">
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="sr-only">Correo electrónico</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
-                        </div>
-                        <div class="form-group">
-                            <label for="dateOfBirth" class="sr-only">Fecha de Nacimiento</label>
-                            <input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="Fecha de Nacimiento">
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="password" class="sr-only">Contraseña</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="**********">
-                        </div>
-                        <input name="login" id="login" class="btn btn-block login-btn mb-4" type="button" value="Crear cuenta">
-                    </form>
+                        <form action="#!">
+                            @using (Html.BeginForm("Registers", "Register", FormMethod.Post))
+                            {
+                                <div class="form-group">
+                                    <label for="username" class="sr-only">Nombre de usuario</label>
+                                    <input type="text" name="username" id="username" class="form-control" placeholder="Nombre de usuario">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="sr-only">Nombre</label>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastname" class="sr-only">Apellido</label>
+                                    <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Apellido">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="sr-only">Correo electrónico</label>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateOfBirth" class="sr-only">Fecha de Nacimiento</label>
+                                    <input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" placeholder="Fecha de Nacimiento">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="password" class="sr-only">Contraseña</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="**********">
+                                </div>
+                                <input name="login" id="login" class="btn btn-block login-btn mb-4" asp-action="index" asp-controller="Register" type="button" value="Crear cuenta">
+                            }
+                        </form>
                     </div>
                 </div>
             </div>
