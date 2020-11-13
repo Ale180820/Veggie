@@ -6,8 +6,12 @@ body {
 .brand-wrapper {
   margin-bottom: 19px; }
   .brand-wrapper .logo {
-    height: 120px; }
+    height: 100px; }
 
+  .brand-wrappper {
+      margin-bottom: 19px; }
+    .brand-wrappper .logo {
+        height: 85px; }
 .login-card {
   border: 0;
   border-radius: 27.5px;
