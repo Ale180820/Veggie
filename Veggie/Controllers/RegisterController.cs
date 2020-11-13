@@ -41,6 +41,7 @@ namespace Veggie.Controllers
                 emailUser = collection["email"],
             };
             newUser.userId = newUser.generateId();
+            newUser.statusUser = "Avaiable";
             return newUser;
         }
     }
