@@ -5,6 +5,7 @@ using System.Text;
 namespace VeggieBack.Models {
     public class User {
 
+        public static int codeUser = 0;
         public int userId { get; set; }
         public string username { get; set; }
         public string password { get; set; }
@@ -12,9 +13,15 @@ namespace VeggieBack.Models {
         public string lastNameUser { get; set; }
         public string statusUser { get; set; }
         public string emailUser { get; set; }
-        public string dateOfBirth { get; set; }
 
         public User() { }
+
+        public int generateId() {
+            codeUser++;
+            return codeUser;
+        }
+
+
 
     }
 }
