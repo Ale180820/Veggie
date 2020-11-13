@@ -9,13 +9,12 @@ using VeggieBack.Models;
 
 namespace Veggie.Controllers {
     public class RegisterController : Controller {
-
-        public IActionResult Index() {
-            return View();
+        public IActionResult Create(){
+            return View("Create");
         }
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection) {
+        public ActionResult Create(IFormCollection collection) {
             RequestVeggieController request = new RequestVeggieController();
             try {
                 var newUser = new User {
