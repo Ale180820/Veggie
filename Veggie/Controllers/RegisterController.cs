@@ -1,19 +1,36 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VeggieAPI.Controllers;
+using VeggieBack.Models;
 
 namespace Veggie.Controllers {
     public class RegisterController : Controller {
 
         public IActionResult Index() {
-            return View("Register");
+            return View();
         }
 
-        public IActionResult Registers(FormCollection collection) {
-            return View("Index");
+        [HttpPost]
+        public ActionResult Create(FormCollection collection) {
+            RequestVeggieController request = new RequestVeggieController();
+            try {
+                var newUser = new User {
+
+                    username = collection["username"],
+                    password = collection["password"],
+                    nameUser = collection["name"],
+                    lastNameUser = collection["lastname"],
+                    emailUser = collection["email"],
+                };
+                request.createUser(newUser);
+                return View();
+            }catch {
+                return View();
+            }
         }
     }
 }
