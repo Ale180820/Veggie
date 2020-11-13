@@ -163,7 +163,7 @@ C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\staticwebasset
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.dll
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.pdb
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.genruntimeconfig.cache
-C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Register.cshtml.g.cs
+C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Index.cshtml.g.cs
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieAPI.exe
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\DnsClient.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Http.Features.dll
@@ -255,4 +255,4 @@ C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieAPI.pdb
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieBack.pdb
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Register.cshtml.g.cs
+C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Index.cshtml.g.cs
