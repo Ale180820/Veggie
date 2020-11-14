@@ -20,7 +20,7 @@ namespace Veggie.Controllers
                 var userComplete = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userComplete);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-                var response = APIConnection.WebApliClient.PostAsync("api/createUser", user).Result;
+                var response = APIConnection.WebApliClient.PostAsync("api/create", user).Result;
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Home");
                 }else {
@@ -40,7 +40,7 @@ namespace Veggie.Controllers
                 lastNameUser = collection["lastname"],
                 emailUser = collection["email"],
             };
-            newUser.userId = newUser.generateId();
+            newUser._id = newUser.generateId();
             newUser.statusUser = "Avaiable";
             return newUser;
         }

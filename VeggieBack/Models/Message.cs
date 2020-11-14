@@ -5,7 +5,7 @@ using System.Text;
 namespace VeggieBack.Models {
     public class Message {
 
-        public int messageId { get; set; }
+        public int _id { get; set; }
         public UserMessage sendingUser { get; set; }
         public UserMessage receivingUser { get; set; }
         public DateTime messageInformation { get; set; }
