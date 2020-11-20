@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\login-style\" />
+    <Folder Include="wwwroot\lib\chat-style\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

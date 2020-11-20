@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Veggie.Models;
 using Veggie.System;
+using VeggieBack.Controllers;
 using VeggieBack.Models;
 
 namespace Veggie.Controllers {
@@ -37,16 +38,23 @@ namespace Veggie.Controllers {
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
                 var response = APIConnection.WebApliClient.PostAsync("api/login", user).Result;
-                return View();
-            }catch {
+                if (response.IsSuccessStatusCode) {
+                    return RedirectToAction("Index", "Chat");
+                } else {
+                    //Mostrar error de datos equivocados en login.
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch {
                 return RedirectToAction("Error", "Home");
             }
         }
 
         public User constructObject(IFormCollection collection){
+            CesarCipher encryption = new CesarCipher();
             var newUser = new User { 
                 emailUser = collection["email"],
-                password = collection["password"],
+                password = encryption.Encryption(collection["password"]),
             };
             return newUser;
         }
