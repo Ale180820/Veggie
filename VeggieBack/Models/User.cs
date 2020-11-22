@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,8 +21,5 @@ namespace VeggieBack.Models {
             codeUser++;
             return codeUser;
         }
-
-
-
     }
 }

@@ -14,10 +14,10 @@ namespace VeggieAPI.Controllers {
             return Ok();
         }
 
-        [HttpPost ("create")]
+        [HttpPost ("createUser")]
         public ActionResult createUser([FromBody] User user) {
             if (user.nameUser != null) {
-                if (create(user)) {
+                if (createNewUser(user)) {
                     return Ok();
                 } else {
                     return StatusCode(500, "InternalServerError");
@@ -41,14 +41,52 @@ namespace VeggieAPI.Controllers {
 
         } //12545698
 
-        public bool create(User user) {
+        [HttpPost ("createConversation")]
+        public ActionResult createConversation([FromBody] Conversation conversation) {
+            try {
+                conversation.userTwo = findUser(conversation.userTwo.username);
+                if (createNewConversation(conversation)) {
+                    return Ok();
+                } else {
+                    return StatusCode(500, "InternalServerError");
+                }
+
+            } catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        public bool createNewUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
                 Models.MongoHelper.users_collection.InsertOneAsync(user);
                 return true;
             }catch {
                 return false;
+            }
+        }
+
+        public bool createNewConversation(Conversation conversation) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversations");
+                Models.MongoHelper.conversations_collection.InsertOneAsync(conversation);
+                return true;
+            }catch {
+                return false;
+            }
+        }
+
+        public User findUser(string username) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("username", username);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                return result;
+            } catch {
+                return null;
             }
         }
 
