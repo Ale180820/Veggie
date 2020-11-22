@@ -3238,6 +3238,7 @@
         this._fixTitle();
       }
     };
+ 
 
     _proto._fixTitle = function _fixTitle() {
       var titleType = typeof this.element.getAttribute('data-original-title');
