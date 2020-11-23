@@ -19,6 +19,9 @@ C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.Code
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.Razor.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.Workspaces.dll
+C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
+C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll
@@ -32,6 +35,7 @@ C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\MongoDB.Bson.d
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\MongoDB.Driver.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\MongoDB.Driver.Core.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\MongoDB.Libmongocrypt.dll
+C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Nancy.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\SharpCompress.dll
@@ -111,6 +115,7 @@ C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.RazorAs
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.TagHelpers.input.cache
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.TagHelpers.output.cache
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.RazorCoreGenerate.cache
+C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Chat\Chat.cshtml.g.cs
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Create.cshtml.g.cs
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
@@ -244,6 +249,7 @@ C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.RazorAs
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.TagHelpers.input.cache
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.TagHelpers.output.cache
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.RazorCoreGenerate.cache
+C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Chat\Chat.cshtml.g.cs
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Register\Create.cshtml.g.cs
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
@@ -260,4 +266,3 @@ C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\staticwebasset
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.dll
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.pdb
 C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.genruntimeconfig.cache
-C:\Users\victo\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Chat\Chat.cshtml.g.cs

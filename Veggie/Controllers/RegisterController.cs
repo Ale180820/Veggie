@@ -14,6 +14,8 @@ namespace Veggie.Controllers
             return View("Create");
         }
 
+
+        //Recibe el método de creación de usuario
         [HttpPost]
         public ActionResult Create(IFormCollection collection) {
             try {
@@ -31,7 +33,7 @@ namespace Veggie.Controllers
             }
         }
 
-        //Construye el objeto con lo que se encuentra en los componentes
+        //Construye el objeto (usuario) con lo que se encuentra en los componentes
         public User constructObject(IFormCollection collection) {
             CesarCipher encryption = new CesarCipher();
             var newUser = new User {
@@ -41,7 +43,6 @@ namespace Veggie.Controllers
                 lastNameUser = collection["lastname"],
                 emailUser = collection["email"],
             };
-            newUser._id = newUser.generateId();
             newUser.statusUser = "Avaiable";
             return newUser;
         }

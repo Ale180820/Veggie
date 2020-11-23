@@ -9,7 +9,6 @@ using VeggieBack.Models;
 namespace Veggie.Controllers {
     public class ChatController : Controller {
 
-
         // GET: ChatController
         public ActionResult Index() {
             return View("Chat");
@@ -24,7 +23,6 @@ namespace Veggie.Controllers {
                 return RedirectToAction("Error", "Home");
             }
         }
-
 
         [HttpPost]
         public ActionResult CreateConversation(IFormCollection collection) {
@@ -46,7 +44,6 @@ namespace Veggie.Controllers {
             user.username = collection["user"];
             conversation.userTwo = user;
             conversation.messages = new Dictionary<string, Message>();
-            conversation._id = conversation.generateId();
             return conversation;
         }
        
