@@ -28,16 +28,6 @@
                                     <input type="password" name="password" id="password" class="form-control" placeholder="**********">
                                 </div>
                                 <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Ingresar">
-                                <script type="text/javascript">
-                                    $("#login").click(function () {
-                                        var email = $("#email").val();
-                                        var password = $("#password").val();
-                                        //Set user items
-                                        localStorage.setItem("Email", email);
-                                        localStorage.setItem("Password", password);
-                                    }
-                                    );
-                                </script>
                             </form>
                             <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
                             <nav class="login-card-footer-nav">
@@ -51,39 +41,4 @@
         </div>
     </main>
 }
-
-<script>
-    $(document).ready(function() {
-        $("#login").click(function() {
-            var email = $("#email").val();
-            var password = $("#password").val();
-            //set item
-            localStorage.setItem("Email", email);
-            localStorage.setItem("Password", password);
-        });
-    });
-    $(document).ready(function () {
-        $('#loginG').click(function () {
-            var email = $("#email").val();
-            var password = $("#password").val();
-            //set item
-            localStorage.setItem("Email", email);
-            localStorage.setItem("Password", password);
-        });
-        $('#btnLocalStorageRemove').click(function () {
-            //remove item
-            localStorage.removeItem("Email");
-        });
-        $('#btnLocalStorageClear').click(function () {
-            //clear Local Storage
-            localStorage.clear();
-        });
-        $('#btnLocalStorageLength').click(function () {
-            var localStoragelocalStoragelength = localStorage.length;
-            alert("The length of Local storage is " + localStoragelength);
-
-        });
-    }
-</script>
-
 

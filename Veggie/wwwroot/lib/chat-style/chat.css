@@ -750,12 +750,13 @@ span.status-circle:before {
     }
 
     #frame .content .messages ul li.sent img {
+        float: left;
         margin: 6px 8px 0 0;
     }
 
     #frame .content .messages ul li.sent p {
-        background: #40916c;
-        color: #f5f5f5;
+        background: #52b788;
+        float: left;
     }
 
     #frame .content .messages ul li.replies img {
@@ -778,13 +779,13 @@ span.status-circle:before {
         display: inline-block;
         padding: 10px 15px;
         border-radius: 20px;
-        max-width: 205px;
+        max-width: 250px;
         line-height: 130%;
     }
 
 @media screen and (min-width: 735px) {
     #frame .content .messages ul li p {
-        max-width: 300px;
+        max-width: 700px;
     }
 }
 

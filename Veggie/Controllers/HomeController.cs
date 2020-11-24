@@ -34,7 +34,6 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
-                //Quitar luego
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
