@@ -2,6 +2,8 @@
 using MongoDB.Driver;
 using System.Net.Http;
 using VeggieBack.Models;
+using VeggieBack.Controllers;
+using System;
 
 namespace VeggieAPI.Controllers {
 
@@ -66,6 +68,28 @@ namespace VeggieAPI.Controllers {
             }catch {
                 return false;
             }
+        }
+
+
+        public void cipherMessage(bool cipher, string message) {
+            DiffieHellman diffie = new DiffieHellman();
+            SDES sdesEncryption = new SDES();
+            var result = "";
+            //Agregar validacion si en la base de datos existe una lleve agregada
+            int key = 0;
+            //key = valor de la key en la base de datos
+            if (key == 0) {
+                var randomNumber = new Random();
+                int value = randomNumber.Next(5, 999);
+                key = diffie.GenerateKeys(value);
+                result = sdesEncryption.CifradoDecifrado(message, cipher, key);
+                //Enviar a la base de datos
+            }
+            else {
+                result = sdesEncryption.CifradoDecifrado(message, cipher, key);
+                //Enviar a la base de datos
+            }
+            
         }
     }
 }
