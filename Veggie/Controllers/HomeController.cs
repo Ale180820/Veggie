@@ -51,7 +51,39 @@ namespace Veggie.Controllers {
             }
         }
 
-      
+        public void getUserLogin(string userLogin) {
+            string id = "";
+            if (userLogin != null) {
+                id = userLogin;
+                
+            }
+            else {
+                id = "null";                
+            }
+        }
+
+        public string contact(string user) {
+            return "Manuel";
+        }
+
+        public string GetID(string email) {
+            string valor = "";
+            var userLogin = new User {
+                emailUser = email
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
+            var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/findUser", user).Result;
+            if (response.IsSuccessStatusCode) {
+                //valor = id;
+            }
+            else {
+                valor = "null";
+            }
+
+            return valor;
+            
+        }
 
         public User constructObject(IFormCollection collection){
             CesarCipher encryption = new CesarCipher();
