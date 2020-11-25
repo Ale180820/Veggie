@@ -38,8 +38,7 @@ namespace VeggieAPI.Controllers {
             }else {
                 return StatusCode(500, "InternalServerError");
             }
-
-        } //12545698
+        }
 
         [HttpPost ("createConversation")]
         public ActionResult createConversation([FromBody] Conversation conversation) {
@@ -81,10 +80,8 @@ namespace VeggieAPI.Controllers {
         public User findUser(string username) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("username", username);
-                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
-                return result;
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault(); ;
             } catch {
                 return null;
             }
@@ -93,9 +90,8 @@ namespace VeggieAPI.Controllers {
         public bool loginUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
-                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
+                var result = Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser)).FirstOrDefault();
                 if (user.password.Equals(result.password)) {
                     return true;
                 }else {
