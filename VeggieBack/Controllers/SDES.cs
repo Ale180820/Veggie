@@ -2,6 +2,7 @@
 
 namespace VeggieBack.Controllers {
     public class SDES {
+
         private static string k1 = string.Empty;
         private static string k2 = string.Empty;
 
@@ -76,10 +77,12 @@ namespace VeggieBack.Controllers {
 
         #region Principal process
         public string CifradoDecifrado(string info, bool cipher, int key) {
+
             var aux = string.Empty;
+
             CreateKey(key.ToString().PadLeft(10, '0'), cipher);
-            foreach (var character in info)
-            {
+
+            foreach (var character in info) {
                 var binCharacter = Convert.ToString((int)character, 2).PadLeft(8, '0');
 
                 var ResultIP = IP(binCharacter, true);
