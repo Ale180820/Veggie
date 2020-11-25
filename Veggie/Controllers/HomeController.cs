@@ -34,7 +34,6 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
-                return RedirectToAction("Index", "Chat");
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
@@ -73,16 +72,14 @@ namespace Veggie.Controllers {
             };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            var response = APIConnection.WebApliClient.PostAsync("api/findUser", user).Result;
+            var response = APIConnection.WebApliClient.PostAsync("api/findUserByEmail", user).Result;
             if (response.IsSuccessStatusCode) {
-                //valor = id;
+                valor = response.Content.ToString();
             }
             else {
                 valor = "null";
             }
-
             return valor;
-            
         }
 
         public User constructObject(IFormCollection collection){
