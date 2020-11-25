@@ -34,6 +34,7 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
+                return RedirectToAction("Index", "Chat");
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
@@ -49,6 +50,8 @@ namespace Veggie.Controllers {
                 return RedirectToAction("Error", "Home");
             }
         }
+
+      
 
         public User constructObject(IFormCollection collection){
             CesarCipher encryption = new CesarCipher();
