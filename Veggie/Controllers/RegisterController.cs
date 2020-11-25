@@ -22,7 +22,7 @@ namespace Veggie.Controllers
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(constructObject(collection));
                 var response = APIConnection.WebApliClient.PostAsync("api/createUser", new StringContent(json.ToString(), Encoding.UTF8, "application/json")).Result;
                 if (response.IsSuccessStatusCode) {
-                    return RedirectToAction("Index", "Chat");
+                    return RedirectToAction("Index", "Home");
                 }else {
                     // ----- ERROR EN CREACIÓN DE USUARIO ------
                     // ------ [MOSTRAR NOTIFICACIÓN] ------
