@@ -24,9 +24,9 @@ namespace Veggie.Controllers
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Home");
                 }else {
-                    // ----- ERROR EN CREACIÓN DE USUARIO ------
-                    // ------ [MOSTRAR NOTIFICACIÓN] ------
-                    return RedirectToAction("Error", "Home"); 
+                    TempData["smsFail"] = "No ha sido posible registrar el usuario, intentelo nuevamente.";
+                    ViewBag.smsFail = TempData["smsFail"].ToString();
+                    return View(); 
                 }
             }catch {
                 return View();

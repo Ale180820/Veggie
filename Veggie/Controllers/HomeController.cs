@@ -19,6 +19,9 @@ namespace Veggie.Controllers {
         }
 
         public IActionResult Index() {
+            if (TempData["smsFail"] != null) {
+                ViewBag.Message = TempData["smsFail"].ToString();
+            }
             return View();
         }
 
@@ -34,6 +37,7 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
+                
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
@@ -41,13 +45,45 @@ namespace Veggie.Controllers {
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Chat");
                 } else {
-                    //Mostrar error de datos equivocados en login.
-                    return RedirectToAction("Error", "Home");
+                    TempData["smsFail"] = "No ha sido posible iniciar sesión, intentelo nuevamente.";
+                    return RedirectToAction("Index", "Home");
                 }
             }
             catch {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Index", "Home");
             }
+        }
+
+        public void getUserLogin(string userLogin) {
+            string id = "";
+            if (userLogin != null) {
+                id = userLogin;
+                
+            }
+            else {
+                id = "null";                
+            }
+        }
+
+        public string contact(string user) {
+            return "Manuel";
+        }
+
+        public string GetID(string email) {
+            string valor = "";
+            var userLogin = new User {
+                emailUser = email
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
+            var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/findUserByEmail", user).Result;
+            if (response.IsSuccessStatusCode) {
+                valor = response.Content.ToString();
+            }
+            else {
+                valor = "null";
+            }
+            return valor;
         }
 
         public User constructObject(IFormCollection collection){

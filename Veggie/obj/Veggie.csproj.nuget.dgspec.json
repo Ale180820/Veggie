@@ -168,6 +168,9 @@
             "projectReferences": {
               "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
                 "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj"
+              },
+              "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj": {
+                "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj"
               }
             }
           }

@@ -12,11 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VeggieAPI\VeggieAPI.csproj" />
+    <ProjectReference Include="..\VeggieBack\VeggieBack.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\login-style\" />
-    <Folder Include="wwwroot\lib\chat-style\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

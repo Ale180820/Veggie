@@ -4,6 +4,16 @@
 
 @using (Html.BeginForm("Create", "Register", FormMethod.Post))
 {
+    if (ViewBag.smsFail != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
+            <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
     <link rel="stylesheet" href="~/lib/chat-style/chat.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -22,27 +32,94 @@
                             <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
                         </ul>
                     </div>
-                    
+
                 </div>
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="Search contacts..." />
+                <input id="searchbar" onkeyup="search_animal()" type="text"
+                       name="search" placeholder="Search animals..">
+
             </div>
+
             <div id="contacts">
                 <ul>
-                    <li class="contact">
+                    <li class="contact users">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                             <div class="meta">
-                                <p class="name">Louis Litt</p>
+                                <p class="name" id="name">Louis Litt</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Andrea</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Andrea</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Mario</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Julia</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Julio</p>
                                 <p class="preview">You just got LITT up, Mike.</p>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
+
+            <!-- linking javscript -->
+            <script src="/lib/chat-style/search.js"></script>
+
             <div id="bottom-bar">
                 <button id="addcontact"><i class="fa fa-user-plus" aria-hidden="true"></i> <span>Add contact</span></button>
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
@@ -74,65 +151,65 @@
             </div>
         </div>
     </div>
-    <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
-    <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-    <script>
-        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+}
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script>
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script>
+    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
-        $("#profile-img").click(function () {
-            $("#status-options").toggleClass("active");
-        });
+    $("#profile-img").click(function () {
+        $("#status-options").toggleClass("active");
+    });
 
-        $(".expand-button").click(function () {
-            $("#profile").toggleClass("expanded");
-            $("#contacts").toggleClass("expanded");
-        });
+    $(".expand-button").click(function () {
+        $("#profile").toggleClass("expanded");
+        $("#contacts").toggleClass("expanded");
+    });
 
-        $("#status-options ul li").click(function () {
+    $("#status-options ul li").click(function () {
+        $("#profile-img").removeClass();
+        $("#status-online").removeClass("active");
+        $("#status-away").removeClass("active");
+        $("#status-busy").removeClass("active");
+        $("#status-offline").removeClass("active");
+        $(this).addClass("active");
+
+        if ($("#status-online").hasClass("active")) {
+            $("#profile-img").addClass("online");
+        } else if ($("#status-away").hasClass("active")) {
+            $("#profile-img").addClass("away");
+        } else if ($("#status-busy").hasClass("active")) {
+            $("#profile-img").addClass("busy");
+        } else if ($("#status-offline").hasClass("active")) {
+            $("#profile-img").addClass("offline");
+        } else {
             $("#profile-img").removeClass();
-            $("#status-online").removeClass("active");
-            $("#status-away").removeClass("active");
-            $("#status-busy").removeClass("active");
-            $("#status-offline").removeClass("active");
-            $(this).addClass("active");
-
-            if ($("#status-online").hasClass("active")) {
-                $("#profile-img").addClass("online");
-            } else if ($("#status-away").hasClass("active")) {
-                $("#profile-img").addClass("away");
-            } else if ($("#status-busy").hasClass("active")) {
-                $("#profile-img").addClass("busy");
-            } else if ($("#status-offline").hasClass("active")) {
-                $("#profile-img").addClass("offline");
-            } else {
-                $("#profile-img").removeClass();
-            };
-
-            $("#status-options").removeClass("active");
-        });
-
-        function newMessage() {
-            message = $(".message-input input").val();
-            if ($.trim(message) == '') {
-                return false;
-            }
-            $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-            $('.message-input input').val(null);
-            $('.contact.active .preview').html('<span>You: </span>' + message);
-            $(".messages").animate({ scrollTop: $(document).height() }, "fast");
         };
 
-        $('.submit').click(function () {
-            newMessage();
-        });
+        $("#status-options").removeClass("active");
+    });
 
-        $(window).on('keydown', function (e) {
-            if (e.which == 13) {
-                newMessage();
-                return false;
-            }
-        });
+    function newMessage() {
+        message = $(".message-input input").val();
+        if ($.trim(message) == '') {
+            return false;
+        }
+        $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+        $('.message-input input').val(null);
+        $('.contact.active .preview').html('<span>You: </span>' + message);
+        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    };
+
+    $('.submit').click(function () {
+        newMessage();
+    });
+
+    $(window).on('keydown', function (e) {
+        if (e.which == 13) {
+            newMessage();
+            return false;
+        }
+    });
 //# sourceURL=pen.js</script>
-}
 
 

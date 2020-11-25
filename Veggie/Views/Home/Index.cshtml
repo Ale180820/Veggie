@@ -5,6 +5,17 @@
 @using (Html.BeginForm("Login", "Home", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+
+    if (ViewBag.smsFail != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
+            <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
         <div class="container">
@@ -18,6 +29,7 @@
                             <div class="brand-wrapper">
                                 <img src="~/assets/img/Logo.png" alt="logo" class="logo">
                             </div>
+
                             <form action="#!">
                                 <div class="form-group">
                                     <label for="email" class="sr-only">Email</label>
@@ -28,6 +40,15 @@
                                     <input type="password" name="password" id="password" class="form-control" placeholder="**********">
                                 </div>
                                 <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Ingresar">
+                                <script type="text/javascript">
+                                    $('#login').click(function () {
+                                        var emailx = $("#email").val();
+                                        $.get("/Home/GetID", { email: emailx }, function (data) {
+                                            localStorage.setItem("id", data);
+                                        });
+                                    }
+                                    );
+                                </script>
                             </form>
                             <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
                             <nav class="login-card-footer-nav">

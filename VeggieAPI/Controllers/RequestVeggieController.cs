@@ -13,6 +13,7 @@ namespace VeggieAPI.Controllers {
             return Ok();
         }
 
+        #region User methods
         [HttpPost ("findUserByUsername")]
         public ActionResult findUser([FromBody] string username){
             User newUser = new User();
@@ -23,12 +24,25 @@ namespace VeggieAPI.Controllers {
             }else {
                 return StatusCode(500, "InternalServerError");
             }
-        } 
+        }
+
+        [HttpPost("findUserByUsernameExist")]
+        public ActionResult findUserExist([FromBody] string username) {
+            User newUser = findUserDataBaseByUsername(username);
+            newUser.nameUser = null;
+            newUser.password = null;
+            newUser.lastNameUser = null;
+            if (newUser != null) {
+                return Ok(newUser);
+            } else{
+                return StatusCode(500, "InternalServerError");
+            }
+        }
 
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] string email) {
             User newUser = new User();
-            newUser.username = findUserDataBaseByUsername(email).username;
+            newUser.username = findUserDataBaseByEmail(email).username;
             if (newUser != null){
                 newUser.password = null;
                 return Ok(newUser);
@@ -62,7 +76,7 @@ namespace VeggieAPI.Controllers {
                 return StatusCode(500, "InternalServerError");
             }
         }
-
+        #endregion
         [HttpPost("createConversation")]
         public ActionResult createConversation([FromBody] Conversation conversation) {
             try {
@@ -78,6 +92,7 @@ namespace VeggieAPI.Controllers {
             }
         }
 
+        #region User back methods
         public bool createNewUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -88,6 +103,46 @@ namespace VeggieAPI.Controllers {
                 return false;
             }
         }
+
+        public User findUserDataBaseByUsername(string username){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
+            }catch{
+                return null;
+            }
+        }
+
+        public User findUserDataBaseByEmail(string email){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email)).FirstOrDefault(); ;
+            }catch{
+                return null;
+            }
+        }
+
+        public bool loginUser(User user){
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                if (result == null){
+                    return false;
+                }
+                if (user.password.Equals(result.password)){
+                    return true;
+                } else{
+                    return false;
+                }
+            } catch{
+                return false;
+            }
+        }
+        #endregion
 
         public bool createNewConversation(Conversation conversation) {
             try {
@@ -100,41 +155,7 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        public User findUserDataBaseByUsername(string username) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
-            } catch {
-                return null;
-            }
-        }
-
-        public User findUserDataBaseByEmail(string email) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email)).FirstOrDefault(); ;
-            } catch {
-                return null;
-            }
-        }
-
-        public bool loginUser(User user) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
-                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
-                if (user.password.Equals(result.password)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch {
-                return false;
-            }
-        }
+        
            
      }
 }

@@ -1,12 +1,12 @@
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.deps.json
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.pdb
+C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csprojAssemblyReference.cache
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.AssemblyInfoInputs.cache
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.AssemblyInfo.cs
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csproj.CoreCompileInputs.cache
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.pdb
-<<<<<<< HEAD
 C:\Users\victo\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.deps.json
 C:\Users\victo\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\victo\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.pdb
@@ -15,7 +15,3 @@ C:\Users\victo\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack
 C:\Users\victo\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csproj.CoreCompileInputs.cache
 C:\Users\victo\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\victo\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.pdb
-C:\Users\victo\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csprojAssemblyReference.cache
-=======
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csprojAssemblyReference.cache
->>>>>>> cea5471cb16d12a6bf7328df927fddcab3af39c0
