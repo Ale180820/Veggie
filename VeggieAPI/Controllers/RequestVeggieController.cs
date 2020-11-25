@@ -27,6 +27,18 @@ namespace VeggieAPI.Controllers {
             }
         }
 
+        [HttpPost("findUserByEmail")]
+        public ActionResult findUserByEmail([FromBody] string email) {
+            User newUser = new User();
+            newUser._id = findUserDataBaseByUsername(email)._id;
+            if (newUser != null){
+                newUser.password = null;
+                return Ok(newUser);
+            } else {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
         [HttpPost("createUser")]
         public ActionResult createUser([FromBody] User user) {
             if (user.nameUser != null) {
