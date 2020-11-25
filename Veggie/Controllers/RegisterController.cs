@@ -22,7 +22,7 @@ namespace Veggie.Controllers
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(constructObject(collection));
                 var response = APIConnection.WebApliClient.PostAsync("api/createUser", new StringContent(json.ToString(), Encoding.UTF8, "application/json")).Result;
                 if (response.IsSuccessStatusCode) {
-                    return RedirectToAction("Index", "Chat");
+                    return RedirectToAction("Index", "Home");
                 }else {
                     // ----- ERROR EN CREACIÓN DE USUARIO ------
                     // ------ [MOSTRAR NOTIFICACIÓN] ------
@@ -36,7 +36,7 @@ namespace Veggie.Controllers
         //Construye el objeto (usuario) con lo que se encuentra en los componentes
         public User constructObject(IFormCollection collection) {
             CesarCipher encryption = new CesarCipher();
-            var newUser = new User {
+            var newUser = new User () {
                 username = collection["username"],
                 password = encryption.Encryption(collection["password"]),
                 nameUser = collection["name"],
