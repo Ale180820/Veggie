@@ -40,15 +40,10 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("findUserByEmail")]
-        public ActionResult findUserByEmail([FromBody] string email) {
+        public ActionResult findUserByEmail([FromBody] User email) {
             User newUser = new User();
-            newUser._id = findUserDataBaseByEmail(email)._id;
-            if (newUser != null){
-                newUser.password = null;
-                return Ok(newUser);
-            } else {
-                return StatusCode(500, "InternalServerError");
-            }
+            newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
+            return Ok(newUser);
         }
 
         [HttpPost("createUser")]
@@ -78,18 +73,30 @@ namespace VeggieAPI.Controllers {
         }
         #endregion
         [HttpPost("createConversation")]
-        public ActionResult createConversation([FromBody] Conversation conversation) {
+        public ActionResult createConversation([FromBody] Entry userConversation) {
+
             try {
-                conversation.userTwo = findUserDataBaseByUsername(conversation.userTwo.username);
-                if (createNewConversation(conversation)) {
+                Conversation newConversation = new Conversation();
+                //newConversation.userOne = findUserById(int.Parse(userConversation.actualUser));
+                if (createNewConversation(newConversation)) {
                     return Ok();
-                } else {
+                }else {
                     return StatusCode(500, "InternalServerError");
                 }
-
-            } catch {
+            }catch {
                 return StatusCode(500, "InternalServerError");
             }
+            //try {
+            //    conversation.userTwo = findUserDataBaseByUsername(conversation.userTwo.username);
+            //    if (createNewConversation(conversation)) {
+            //        return Ok();
+            //    } else {
+            //        return StatusCode(500, "InternalServerError");
+            //    }
+
+            //} catch {
+            //    return StatusCode(500, "InternalServerError");
+            //}
         }
 
         #region User back methods
@@ -118,8 +125,11 @@ namespace VeggieAPI.Controllers {
             try{
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email)).FirstOrDefault(); ;
-            }catch{
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                return result;
+            }
+            catch{
                 return null;
             }
         }
@@ -152,6 +162,16 @@ namespace VeggieAPI.Controllers {
                 return true;
             } catch {
                 return false;
+            }
+        }
+
+        public User  findUserById(int idUser) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("_id", idUser)).FirstOrDefault(); ;
+            } catch {
+                return null;
             }
         }
 
