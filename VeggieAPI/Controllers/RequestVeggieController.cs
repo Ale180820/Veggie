@@ -18,19 +18,19 @@ namespace VeggieAPI.Controllers {
         [HttpPost ("findUserByUsername")]
         public ActionResult findUser([FromBody] string username){
             User newUser = new User();
-            newUser._id = findUserDataBaseByUsername(username)._id;
+            newUser.username = findUserDataBaseByUsername(username).username;
             if(newUser != null) {
                 newUser.password = null;
                 return Ok(newUser);
             }else {
                 return StatusCode(500, "InternalServerError");
             }
-        }
+        } 
 
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] string email) {
             User newUser = new User();
-            newUser._id = findUserDataBaseByUsername(email)._id;
+            newUser.username = findUserDataBaseByUsername(email).username;
             if (newUser != null){
                 newUser.password = null;
                 return Ok(newUser);
@@ -106,7 +106,7 @@ namespace VeggieAPI.Controllers {
             try {
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault(); ;
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
             } catch {
                 return null;
             }
