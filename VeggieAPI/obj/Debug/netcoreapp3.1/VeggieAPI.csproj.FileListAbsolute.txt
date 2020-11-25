@@ -56,7 +56,6 @@ C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\runtimes\wi
 C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
 C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\VeggieBack.dll
 C:\Users\victo\source\repos\Veggie\VeggieAPI\bin\Debug\netcoreapp3.1\VeggieBack.pdb
-C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.csprojAssemblyReference.cache
 C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.AssemblyInfoInputs.cache
 C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.AssemblyInfo.cs
 C:\Users\victo\source\repos\Veggie\VeggieAPI\obj\Debug\netcoreapp3.1\VeggieAPI.csproj.CoreCompileInputs.cache
