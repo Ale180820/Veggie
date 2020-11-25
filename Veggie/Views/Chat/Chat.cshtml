@@ -27,12 +27,14 @@
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" id="search" placeholder="Search contacts..." />
+                <input id="searchbar" onkeyup="search_animal()" type="text"
+                       name="search" placeholder="Search animals..">
+
             </div>
 
             <div id="contacts">
                 <ul>
-                    <li class="contact">
+                    <li class="contact users">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
@@ -44,7 +46,7 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="contact">
+                    <li class="contact users">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
@@ -56,7 +58,7 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="contact">
+                    <li class="contact users">
                         <div class="wrap">
                             <span class="contact-status online"></span>
                             <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
@@ -67,7 +69,46 @@
                         </div>
                     </li>
                 </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Mario</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Julia</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="contact users">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+                                <p class="name" id="name">Julio</p>
+                                <p class="preview">You just got LITT up, Mike.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
+
+            <!-- linking javscript -->
+            <script src="/lib/chat-style/search.js"></script>
 
             <div id="bottom-bar">
                 <button id="addcontact"><i class="fa fa-user-plus" aria-hidden="true"></i> <span>Add contact</span></button>
