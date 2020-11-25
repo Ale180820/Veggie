@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace VeggieBack.Models {
     public class User {
