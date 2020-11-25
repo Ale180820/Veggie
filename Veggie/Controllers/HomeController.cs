@@ -18,7 +18,7 @@ namespace Veggie.Controllers {
             _logger = logger;
         }
 
-        public IActionResult Index() {
+        public ActionResult Index() {
             if (TempData["smsFail"] != null) {
                 ViewBag.Message = TempData["smsFail"].ToString();
             }
@@ -50,6 +50,7 @@ namespace Veggie.Controllers {
                 }
             }
             catch {
+                TempData["smsFail"] = "No ha sido posible iniciar sesión, intentelo nuevamente.";
                 return RedirectToAction("Index", "Home");
             }
         }
