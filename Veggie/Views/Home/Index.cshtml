@@ -6,9 +6,8 @@
 {
     @Html.AntiForgeryToken()
 
-    if (ViewBag.smsFail != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
+    if (ViewBag.smsFail != null) {
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 25px; left: 680px;" role="alert">
             <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>

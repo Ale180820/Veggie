@@ -42,7 +42,7 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] string email) {
             User newUser = new User();
-            newUser.username = findUserDataBaseByEmail(email).username;
+            newUser._id = findUserDataBaseByEmail(email)._id;
             if (newUser != null){
                 newUser.password = null;
                 return Ok(newUser);
