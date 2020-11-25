@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using VeggieBack.Models;
-using VeggieBack.Controllers;
-using System;
 
 namespace VeggieAPI.Controllers {
 
@@ -83,7 +81,7 @@ namespace VeggieAPI.Controllers {
         public bool createNewUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
                 Models.MongoHelper.users_collection.InsertOneAsync(user);
                 return true;
             } catch {
@@ -94,7 +92,7 @@ namespace VeggieAPI.Controllers {
         public bool createNewConversation(Conversation conversation) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversations");
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
                 Models.MongoHelper.conversations_collection.InsertOneAsync(conversation);
                 return true;
             } catch {
@@ -105,7 +103,7 @@ namespace VeggieAPI.Controllers {
         public User findUserDataBaseByUsername(string username) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
                 return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
             } catch {
                 return null;
@@ -115,7 +113,7 @@ namespace VeggieAPI.Controllers {
         public User findUserDataBaseByEmail(string email) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
                 return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email)).FirstOrDefault(); ;
             } catch {
                 return null;
@@ -125,8 +123,12 @@ namespace VeggieAPI.Controllers {
         public bool loginUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("users");
-                var result = Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser)).FirstOrDefault();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                if (result == null) {
+                    return false;
+                }
                 if (user.password.Equals(result.password)) {
                     return true;
                 } else {

@@ -19,6 +19,9 @@ namespace Veggie.Controllers {
         }
 
         public IActionResult Index() {
+            if (TempData["smsFail"] != null) {
+                ViewBag.Message = TempData["smsFail"].ToString();
+            }
             return View();
         }
 
@@ -34,7 +37,7 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
-                return RedirectToAction("Index", "Chat");
+                
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
@@ -42,12 +45,12 @@ namespace Veggie.Controllers {
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Chat");
                 } else {
-                    //Mostrar error de datos equivocados en login.
-                    return RedirectToAction("Error", "Home");
+                    TempData["smsFail"] = "No ha sido posible iniciar sesión, intentelo nuevamente.";
+                    return RedirectToAction("Index", "Home");
                 }
             }
             catch {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Index", "Home");
             }
         }
 

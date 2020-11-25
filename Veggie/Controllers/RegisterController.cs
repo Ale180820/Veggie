@@ -24,9 +24,9 @@ namespace Veggie.Controllers
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Home");
                 }else {
-                    // ----- ERROR EN CREACIÓN DE USUARIO ------
-                    // ------ [MOSTRAR NOTIFICACIÓN] ------
-                    return RedirectToAction("Error", "Home"); 
+                    TempData["smsFail"] = "No ha sido posible registrar el usuario, intentelo nuevamente.";
+                    ViewBag.smsFail = TempData["smsFail"].ToString();
+                    return View(); 
                 }
             }catch {
                 return View();
@@ -36,7 +36,7 @@ namespace Veggie.Controllers
         //Construye el objeto (usuario) con lo que se encuentra en los componentes
         public User constructObject(IFormCollection collection) {
             CesarCipher encryption = new CesarCipher();
-            var newUser = new User {
+            var newUser = new User () {
                 username = collection["username"],
                 password = encryption.Encryption(collection["password"]),
                 nameUser = collection["name"],
