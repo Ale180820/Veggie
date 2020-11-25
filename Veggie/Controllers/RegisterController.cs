@@ -10,28 +10,30 @@ namespace Veggie.Controllers
 {
     public class RegisterController : Controller {
 
+        //Retorna la vista de creación
         public IActionResult Create(){
             return View("Create");
         }
 
+        //Recibe el método de creación de usuario
         [HttpPost]
         public ActionResult Create(IFormCollection collection) {
             try {
-                var userComplete = constructObject(collection);
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(userComplete);
-                var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-                var response = APIConnection.WebApliClient.PostAsync("api/create", user).Result;
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(constructObject(collection));
+                var response = APIConnection.WebApliClient.PostAsync("api/createUser", new StringContent(json.ToString(), Encoding.UTF8, "application/json")).Result;
                 if (response.IsSuccessStatusCode) {
                     return RedirectToAction("Index", "Chat");
                 }else {
-                    return RedirectToAction("Error", "Home");
+                    // ----- ERROR EN CREACIÓN DE USUARIO ------
+                    // ------ [MOSTRAR NOTIFICACIÓN] ------
+                    return RedirectToAction("Error", "Home"); 
                 }
             }catch {
                 return View();
             }
         }
 
-        //Construye el objeto con lo que se encuentra en los componentes
+        //Construye el objeto (usuario) con lo que se encuentra en los componentes
         public User constructObject(IFormCollection collection) {
             CesarCipher encryption = new CesarCipher();
             var newUser = new User {
@@ -41,7 +43,6 @@ namespace Veggie.Controllers
                 lastNameUser = collection["lastname"],
                 emailUser = collection["email"],
             };
-            newUser._id = newUser.generateId();
             newUser.statusUser = "Avaiable";
             return newUser;
         }

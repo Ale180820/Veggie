@@ -18,6 +18,16 @@
                             <div class="brand-wrapper">
                                 <img src="~/assets/img/Logo.png" alt="logo" class="logo">
                             </div>
+                            <script type="text/javascript">
+                                $("#login").click(function () {
+                                    var email = $("#email").val();
+
+                                    //Set user items
+                                    localStorage.setItem("Email", email);
+                                }
+                                );
+                            </script>
+
                             <form action="#!">
                                 <div class="form-group">
                                     <label for="email" class="sr-only">Email</label>

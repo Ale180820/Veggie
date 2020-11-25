@@ -11,6 +11,7 @@ namespace VeggieAPI.Models {
         public static string MongoConnection = "mongodb+srv://veggie_user:pass123@veggie.ioh5v.mongodb.net/<dbname>?retryWrites=true&w=majority";
         public static string MongoDatabase = "VeggieDB";
         public static IMongoCollection<VeggieBack.Models.User> users_collection { get; set; }
+        public static IMongoCollection<VeggieBack.Models.Conversation> conversations_collection { get; set; }
 
         internal static void ConnectToMongoService() {
             try { 

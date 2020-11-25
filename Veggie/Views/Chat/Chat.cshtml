@@ -27,7 +27,17 @@
             </div>
             <div id="search">
                 <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input type="text" placeholder="Search contacts..." />
+                <input type="text" id="search" placeholder="Search contacts..." />
+                <script type="text/javascript">
+                    $("#login").click(function () {
+                        var email = $("#email").val();
+                        var password = $("#password").val();
+                        //Set user items
+                        localStorage.setItem("Email", email);
+                        localStorage.setItem("Password", password);
+                    }
+                    );
+                </script>
             </div>
             <div id="contacts">
                 <ul>

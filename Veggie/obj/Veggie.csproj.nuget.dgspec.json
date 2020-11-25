@@ -1,24 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ayalr\\source\\repos\\Veggie\\Veggie\\Veggie.csproj": {}
+    "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
+    "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj",
+        "projectUniqueName": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj",
         "projectName": "VeggieAPI",
-        "projectPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj",
-        "packagesPath": "C:\\Users\\ayalr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\obj\\",
+        "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj",
+        "packagesPath": "C:\\Users\\victo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\ayalr\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\victo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -30,8 +31,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj": {
-                "projectPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj"
+              "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj": {
+                "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj"
               }
             }
           }
@@ -68,25 +69,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj": {
+    "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
+        "projectUniqueName": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
         "projectName": "VeggieBack",
-        "projectPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
-        "packagesPath": "C:\\Users\\ayalr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieBack\\obj\\",
+        "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\VeggieBack.csproj",
+        "packagesPath": "C:\\Users\\victo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieBack\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\ayalr\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\victo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -133,25 +135,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\ayalr\\source\\repos\\Veggie\\Veggie\\Veggie.csproj": {
+    "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ayalr\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
+        "projectUniqueName": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
         "projectName": "Veggie",
-        "projectPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
-        "packagesPath": "C:\\Users\\ayalr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\Veggie\\obj\\",
+        "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\Veggie.csproj",
+        "packagesPath": "C:\\Users\\victo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\victo\\source\\repos\\Veggie\\Veggie\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\ayalr\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\victo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -163,8 +166,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
-                "projectPath": "C:\\Users\\ayalr\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj"
+              "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj": {
+                "projectPath": "C:\\Users\\victo\\source\\repos\\Veggie\\VeggieAPI\\VeggieAPI.csproj"
               }
             }
           }
@@ -209,7 +212,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
