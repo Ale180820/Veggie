@@ -17,14 +17,14 @@ namespace VeggieAPI.Controllers {
         }
 
         #region User methods
-        [HttpPost ("findUserByUsername")]
-        public ActionResult findUser([FromBody] string username){
+        [HttpPost("findUserByUsername")]
+        public ActionResult findUser([FromBody] string username) {
             User newUser = new User();
             newUser.username = findUserDataBaseByUsername(username).username;
-            if(newUser != null) {
+            if (newUser != null) {
                 newUser.password = null;
                 return Ok(newUser);
-            }else {
+            } else {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -37,7 +37,7 @@ namespace VeggieAPI.Controllers {
             newUser.lastNameUser = null;
             if (newUser != null) {
                 return Ok(newUser);
-            } else{
+            } else {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -54,10 +54,10 @@ namespace VeggieAPI.Controllers {
             if (user.nameUser != null) {
                 if (createNewUser(user)) {
                     return Ok();
-                } else{
+                } else {
                     return StatusCode(500, "InternalServerError");
                 }
-            } else{
+            } else {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -76,19 +76,36 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("sendMessage")]
-        public ActionResult sendMessage([FromBody] Message message){
+        public ActionResult sendMessage([FromBody] Message message) {
             try {
                 if (sendMessageInConversation(message)) {
                     return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
-                }else{
+                } else {
                     return StatusCode(500, "InternalServerError");
+                }
+            } catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        #endregion
+        [HttpPost("findConversationByUsers")]
+        public ActionResult findConversation([FromBody] Entry userConversation) {
+            try {
+                var firstUser = findUserById(int.Parse(userConversation.actualUser)).username;
+                var secondUser = findUserDataBaseByUsername(userConversation.sendUser).username;
+                if (findConversation(firstUser, secondUser)){
+                    return Ok(false);
+                }else if (findConversation(secondUser, firstUser)){
+                    return Ok(false);
+                }else {
+                    return Ok(true);
                 }
             }catch {
                 return StatusCode(500, "InternalServerError");
             }
         }
 
-        #endregion
         [HttpPost("createConversation")]
         public ActionResult createConversation([FromBody] Entry userConversation) {
             try {
@@ -214,6 +231,24 @@ namespace VeggieAPI.Controllers {
             }
             catch {
                 return null;
+            }
+        }
+
+        public bool findConversation(string userOne, string userTwo){
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userOne.username", userOne);
+                var filterTwo = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userTwo.username", userTwo);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                var resultTwo = Models.MongoHelper.conversations_collection.Find(filterTwo).FirstOrDefault();
+                if (resultTwo != null && result != null) {
+                    return true;
+                }else {
+                    return false;
+                }
+            }catch {
+                return false;
             }
         }
 
