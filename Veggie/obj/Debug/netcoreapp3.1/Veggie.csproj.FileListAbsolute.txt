@@ -1,8 +1,8 @@
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieAPI.exe
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\libman.json
+C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\VeggieAPI.exe
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Veggie.exe
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Veggie.deps.json
 C:\Users\ayalr\source\repos\Veggie\Veggie\bin\Debug\netcoreapp3.1\Veggie.runtimeconfig.json
