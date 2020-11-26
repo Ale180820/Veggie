@@ -11,7 +11,7 @@ namespace VeggieBack.Models {
         public User userTwo { get; set; }
         public int firstKey { get; set; }
         public int secondKey { get; set; }
-        public Dictionary<string, Message> messages { get; set; }
+        public List<Message> messages { get; set; }
 
         public Conversation() {
             var rand = new Random();
