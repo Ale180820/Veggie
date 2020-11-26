@@ -14,7 +14,7 @@ namespace Veggie.Controllers {
 
         // GET: ChatController
         public ActionResult Index() {
-            return View("Chat");
+            return View("nChat");
         }
 
         [HttpPost]
@@ -50,6 +50,7 @@ namespace Veggie.Controllers {
                 var search = JsonSerializer.Deserialize<User>(result);
                 Storage.Instance.searchUsers = search;
             }
+
             return RedirectToAction("Index", "Chat");
         }
         public ActionResult SendMessage(string message) {

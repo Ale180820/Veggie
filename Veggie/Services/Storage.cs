@@ -16,7 +16,7 @@ namespace Veggie.Services {
                 return _instance;
             }
         }
-        public User searchUsers;
+        public User searchUsers = new User();
         public User actualUser;
         public List<Message> messages = new List<Message>();
         public List<Conversation> conversations = new List<Conversation>();

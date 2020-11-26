@@ -266,3 +266,4 @@ C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\staticwebasset
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.dll
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.pdb
 C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Veggie.genruntimeconfig.cache
+C:\Users\ayalr\source\repos\Veggie\Veggie\obj\Debug\netcoreapp3.1\Razor\Views\Chat\nChat.cshtml.g.cs

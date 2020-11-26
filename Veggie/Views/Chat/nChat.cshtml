@@ -1,0 +1,122 @@
+﻿@model VeggieBack.Models.User
+@{
+    ViewData["Title"] = "Chat | Veggie";
+}
+
+@using (Html.BeginForm("Index", "Chat", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <div class="container py-5 px-4">
+        <div class="row rounded-lg overflow-hidden shadow">
+            <!-- Users box-->
+            <div class="col-5 px-0">
+                <div class="bg-white">
+
+                    <div class="bg-gray px-4 py-1 bg-light">
+                        <p class="h5 mb-0 py-1">Contactos</p>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" id="searchBar" type="button">Buscar</button>
+                            </div>
+                            <script type="text/javascript">
+                                $('#searchBar').click(function () {
+                                    var userName = $("#username").val();
+                                    $.get("/Chat/SearchUser", { username: userName }, function (data) {
+                                        location.reload();
+                                    });
+                                    
+                                }
+                                );
+                            </script>
+                        </div>
+                    </div>
+                    <div class="messages-box">
+                        <div class="list-group rounded-0" id="user">
+                            @if (Veggie.Services.Storage.Instance.searchUsers.username != null)
+                            {
+                                <a class="list-group-item list-group-item-action active text-white rounded-0" id="userCon">
+                                    <div class="media">
+                                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                        <div class="media-body ml-4">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <h6 class="mb-0">@Veggie.Services.Storage.Instance.searchUsers.username</h6>
+                                            </div>
+                                            <p class="font-italic mb-0 text-small">@Veggie.Services.Storage.Instance.searchUsers.emailUser</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $('#userCon').click(function () {
+                        var id = localStorage.getItem("idUser");
+                        $.get("/Chat/starConversation", { idUsername: id }, function (data) {
+                            location.reload();
+                        });
+                    }
+                    );
+                </script>
+            </div>
+            <!-- Chat Box-->
+            <div class="col-7 px-0 py-0">
+                <div class="px-4 py-5 chat-box bg-white" style="height: 556px">
+
+                    @if (Veggie.Services.Storage.Instance.messages.Count != 0)
+                    {
+                        foreach (var item in Veggie.Services.Storage.Instance.messages)
+                        {
+                            if (item.receivingUser == Veggie.Services.Storage.Instance.searchUsers.username)
+                            {
+                                <div class="media w-50 ml-auto mb-3">
+                                    <div class="media-body">
+                                        <div class="bg-primary rounded py-2 px-3 mb-2">
+                                            <p class="text-small mb-0 text-white">@item.messageInformation</p>
+                                        </div>
+                                        <p class="small text-muted">12:00 PM | Aug 13</p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                    <!-- Sender Message-->
+                    <div class="media w-50 mb-3">
+                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                        <div class="media-body ml-3">
+                            <div class="bg-light rounded py-2 px-3 mb-2">
+                                <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
+                            </div>
+                            <p class="small text-muted">12:00 PM | Aug 13</p>
+                        </div>
+                    </div>
+
+                    <!-- Reciever Message-->
+
+                </div>
+                <!-- Typing area -->
+                <form action="#" class="bg-light">
+                    <div class="input-group">
+                        <input type="text" placeholder="Type a message" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
+                        <div class="input-group-append">
+                            <button class="btn btn-light fa fa-paper-plane" id="send" type="button"></button>
+                        </div>
+                    </div>
+                </form>
+                <script type="text/javascript">
+                    $('#send').click(function () {
+                        var messa = $("#message").val();
+                        $.get("/Chat/SendMessage", { message: messa }, function (data) {
+                            location.reload();
+                        });
+                    }
+                    );
+                </script>
+            </div>
+        </div>
+    </div>
+}
