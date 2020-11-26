@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Veggie.Models;
 using Veggie.System;
+using System.Collections.Generic;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
+using System.Text.Json;
 
 namespace Veggie.Controllers {
     public class HomeController : Controller {
@@ -66,12 +68,9 @@ namespace Veggie.Controllers {
             }
         }
 
-        public string contact(string user) {
-            return "Manuel";
-        }
+        
 
         public string GetID(string email) {
-            string valor = "";
             var userLogin = new User {
                 emailUser = email
             };
@@ -79,8 +78,9 @@ namespace Veggie.Controllers {
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = APIConnection.WebApliClient.PostAsync("api/findUserByEmail", user).Result;
             if (response.IsSuccessStatusCode) {
-                valor = response.Content.ToString();
-                return valor;
+                var result = response.Content.ReadAsStringAsync().Result;
+                var id = JsonSerializer.Deserialize<User>(result);
+                return id._id.ToString();
             }
             else {
                 return "null";
