@@ -39,9 +39,10 @@
                                     <a class="list-group-item list-group-item-success alert-success rounded-0"  id="userCon">
                                         <div class="media">
                                             <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                            @Html.ActionLink(item.username, "getMessages", new { idUsername = item.username })
+                                            <p class="font-italic mb-0 text-small">@item.emailUser</p>
                                             <div class="media-body ml-4">
-                                                    @Html.ActionLink(item.username, "getMessages", new { idUsername = item.username })
-                                                <p class="font-italic mb-0 text-small">@item.emailUser</p>
+
                                             </div>
                                         </div>
                                     </a>
