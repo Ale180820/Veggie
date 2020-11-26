@@ -80,11 +80,11 @@ namespace Veggie.Controllers {
             var response = APIConnection.WebApliClient.PostAsync("api/findUserByEmail", user).Result;
             if (response.IsSuccessStatusCode) {
                 valor = response.Content.ToString();
+                return valor;
             }
             else {
-                valor = "null";
+                return "null";
             }
-            return valor;
         }
 
         public User constructObject(IFormCollection collection){
