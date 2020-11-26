@@ -7,6 +7,7 @@ using Veggie.System;
 using VeggieBack.Models;
 using Veggie.Services;
 using System.Text.Json;
+using System;
 
 namespace Veggie.Controllers {
     public class ChatController : Controller {
@@ -51,26 +52,43 @@ namespace Veggie.Controllers {
             }
             return RedirectToAction("Index", "Chat");
         }
+        public ActionResult SendMessage(string message) {
+            DateTime now = DateTime.Now;
+            var userLogin = new Message {
+                receivingUser = Storage.Instance.searchUsers.username,
+                sendingUser = "Actual",
+                messageInformation = now,
+                typeMessage = true
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
+            var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/findUserByUsernameExist", user).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
+                Storage.Instance.messages = sendMessage;
+            }
+            return RedirectToAction("Index", "Chat");
+        }
 
-        public void starConversation(string idUsername, string sendUser) {
+        public void starConversation(string idUsername) {
             var userLogin = new Entry { 
                 actualUser = idUsername,
-                sendUser = sendUser
+                sendUser = Storage.Instance.searchUsers.username
             };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = APIConnection.WebApliClient.PostAsync("api/createConversation", user).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
-                var search = JsonSerializer.Deserialize<User>(result);
-                Storage.Instance.searchUsers = search;
+                if (result != ""){
+                    var search = JsonSerializer.Deserialize<User>(result);
+                    Storage.Instance.searchUsers = search;
+                }
             }
         }
-        public string contact(string user)
-        {
-            return "Manuel";
-        }
-
+     
 
         public Conversation create(User user, IFormCollection collection) {
             Conversation conversation = new Conversation();

@@ -17,6 +17,7 @@ namespace Veggie.Services {
             }
         }
         public User searchUsers;
+        public User actualUser;
         public List<Message> messages = new List<Message>();
         public List<Conversation> conversations = new List<Conversation>();
         public int idUser = new int();
