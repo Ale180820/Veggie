@@ -20,52 +20,49 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult SendMessage (IFormCollection collection) {
             try {
-                
                 return View();
             }catch {
                 return RedirectToAction("Error", "Home");
             }
         }
 
-        [HttpPost]
-        public ActionResult CreateConversation(IFormCollection collection) {
-            try {
-                var conversatioComplete = create(null, collection);
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(conversatioComplete);
-                var converstation = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-                var response = APIConnection.WebApliClient.PostAsync("api/createConversation", converstation).Result;
-                return RedirectToAction("Index", "Chat");
-            }
-            catch {
-                return RedirectToAction("Index", "Chat");
-            }
-        }
+        //Search and star conversation with a user
         public ActionResult SearchUser(string username) {
             var userLogin = username;
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = APIConnection.WebApliClient.PostAsync("api/findUserByUsernameExist", user).Result;
             if (response.IsSuccessStatusCode) {
-                var result = response.Content.ReadAsStringAsync().Result;
-                var search = JsonSerializer.Deserialize<User>(result);
-                Storage.Instance.searchUsers = search;
+                var resultUser = response.Content.ReadAsStringAsync().Result;
+                var searchUser = JsonSerializer.Deserialize<User>(resultUser);
+                var starCon = new Entry {
+                    actualUser = Storage.Instance.idUser.ToString(),
+                    sendUser = Storage.Instance.searchUsers.username
+                };
+                var json2 = Newtonsoft.Json.JsonConvert.SerializeObject(starCon);
+                var user2 = new StringContent(json2.ToString(), Encoding.UTF8, "application/json");
+                var response2 = APIConnection.WebApliClient.PostAsync("api/createConversation", user2).Result;
+                if (response2.IsSuccessStatusCode) {
+                    Storage.Instance.contacts.Add(searchUser);
+                }
             }
-
             return RedirectToAction("Index", "Chat");
         }
+
+        //Method for send message to others people
         public ActionResult SendMessage(string message) {
             DateTime now = DateTime.Now;
             var userLogin = new Message {
                 receivingUser = Storage.Instance.searchUsers.username,
-                sendingUser = "Actual",
-                messageInformation = now,
+                sendingUser = Storage.Instance.idUser.ToString(),
+                message = message,
+                messageTime = now,
                 typeMessage = true
             };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
-            var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            var response = APIConnection.WebApliClient.PostAsync("api/findUserByUsernameExist", user).Result;
-            if (response.IsSuccessStatusCode)
-            {
+            var messageSend = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/sendMessage", messageSend).Result;
+            if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
                 Storage.Instance.messages = sendMessage;
@@ -73,7 +70,14 @@ namespace Veggie.Controllers {
             return RedirectToAction("Index", "Chat");
         }
 
-        public void starConversation(string idUsername) {
+        //Search message
+        public void searchMessage(string searchMessage) {
+
+        }
+
+
+        //Method for get (if exist) message
+        public ActionResult getMessages(string idUsername) {
             var userLogin = new Entry { 
                 actualUser = idUsername,
                 sendUser = Storage.Instance.searchUsers.username
@@ -83,21 +87,10 @@ namespace Veggie.Controllers {
             var response = APIConnection.WebApliClient.PostAsync("api/createConversation", user).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
-                if (result != ""){
-                    var search = JsonSerializer.Deserialize<User>(result);
-                    Storage.Instance.searchUsers = search;
-                }
+                var search = JsonSerializer.Deserialize <List<Message>>(result);
+                Storage.Instance.messages = search;
             }
-        }
-     
-
-        public Conversation create(User user, IFormCollection collection) {
-            Conversation conversation = new Conversation();
-            conversation.userOne = user;
-            user.username = collection["user"];
-            conversation.userTwo = user;
-            return conversation;
-        }
-       
+            return RedirectToAction("Index", "Chat");
+        }  
     }
 }

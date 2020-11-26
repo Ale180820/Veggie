@@ -10,6 +10,7 @@ using Veggie.System;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 using System.Text.Json;
+using Veggie.Services;
 
 namespace Veggie.Controllers {
     public class HomeController : Controller {
@@ -45,7 +46,17 @@ namespace Veggie.Controllers {
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
                 var response = APIConnection.WebApliClient.PostAsync("api/login", user).Result;
                 if (response.IsSuccessStatusCode) {
+                    var userConver = Storage.Instance.idUser;
+                    var jsonU = Newtonsoft.Json.JsonConvert.SerializeObject(userConver);
+                    var userU = new StringContent(jsonU.ToString(), Encoding.UTF8, "application/json");
+                    var responseU = APIConnection.WebApliClient.PostAsync("api/login", userU).Result;
+                    if (responseU.IsSuccessStatusCode) {
+                        var resultUser = responseU.Content.ReadAsStringAsync().Result;
+                        var contactsU = JsonSerializer.Deserialize<List<User>>(resultUser);
+                        Storage.Instance.contacts = contactsU;
+                    }
                     return RedirectToAction("Index", "Chat");
+
                 } else {
                     TempData["smsFail"] = "No ha sido posible iniciar sesión, intentelo nuevamente.";
                     return RedirectToAction("Index", "Home");
@@ -80,6 +91,7 @@ namespace Veggie.Controllers {
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var id = JsonSerializer.Deserialize<User>(result);
+                Storage.Instance.idUser = id._id;
                 return id._id.ToString();
             }
             else {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using VeggieAPI.Services;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 
@@ -31,6 +32,9 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByUsernameExist")]
         public ActionResult findUserExist([FromBody] string username) {
             User newUser = findUserDataBaseByUsername(username);
+            if (newUser == null) {
+                return StatusCode(500, "InternalServerError");
+            }
             newUser.nameUser = null;
             newUser.password = null;
             newUser.lastNameUser = null;
@@ -70,6 +74,19 @@ namespace VeggieAPI.Controllers {
                     return StatusCode(500);
                 }
             } else {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        [HttpPost("sendMessage")]
+        public ActionResult sendMessage([FromBody] Message message){
+            try {
+                if (sendMessageInConversation(message)) {
+                    return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
+                }else{
+                    return StatusCode(500, "InternalServerError");
+                }
+            }catch {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -170,7 +187,49 @@ namespace VeggieAPI.Controllers {
             } catch {
                 return false;
             }
-        }           
+        }
+        
+        public bool sendMessageInConversation(Message message) {
+            try {
+                SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
+                DiffieHellman df = new DiffieHellman();
+                message.message = encryption.CifradoDecifrado(message.message, true, df.getPrivateKey(Storage.Instance.actualConversation.firstKey, Storage.Instance.actualConversation.secondKey));
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", Storage.Instance.actualConversation);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                    result.messages.Add(message);
+                var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", result.messages);
+                var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);    
+                    return true;
+            } catch {
+                return false;
+            }
+        }
+
+        public List<Message> findConversationById(int idConversation){
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                return result.messages;
+            }
+            catch {
+                return null;
+            }
+        }
+
+        public List<Message> decryptionMessages(List<Message> messages){
+            List<Message> decryptMessage = new List<Message>();
+            foreach (var message in messages) {
+                SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
+                DiffieHellman df = new DiffieHellman();
+                message.message = encryption.CifradoDecifrado(message.message, false, df.getPrivateKey(Storage.Instance.actualConversation.firstKey, Storage.Instance.actualConversation.secondKey));
+                decryptMessage.Add(message);
+            }
+            return decryptMessage;
+        }
      }
 }
 

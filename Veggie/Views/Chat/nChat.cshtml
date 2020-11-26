@@ -14,13 +14,12 @@
             <!-- Users box-->
             <div class="col-5 px-0">
                 <div class="bg-white">
-
                     <div class="bg-gray px-4 py-1 bg-light">
-                        <p class="h5 mb-0 py-1">Contactos</p>
+                        <p class="h5 mb-0 py-1">Conversaciones</p>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control" placeholder="Buscar contacto" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" id="searchBar" type="button">Buscar</button>
+                                <button class="btn btn-outline-secondary fa fa-search" id="searchBar" type="button"></button>
                             </div>
                             <script type="text/javascript">
                                 $('#searchBar').click(function () {
@@ -28,7 +27,6 @@
                                     $.get("/Chat/SearchUser", { username: userName }, function (data) {
                                         location.reload();
                                     });
-                                    
                                 }
                                 );
                             </script>
@@ -36,36 +34,52 @@
                     </div>
                     <div class="messages-box">
                         <div class="list-group rounded-0" id="user">
-                            @if (Veggie.Services.Storage.Instance.searchUsers.username != null)
-                            {
-                                <a class="list-group-item list-group-item-action active text-white rounded-0" id="userCon">
-                                    <div class="media">
-                                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-                                        <div class="media-body ml-4">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <h6 class="mb-0">@Veggie.Services.Storage.Instance.searchUsers.username</h6>
+                            @if (Veggie.Services.Storage.Instance.contacts.Count != 0) {
+                                foreach (var item in Veggie.Services.Storage.Instance.contacts) {
+                                    <a class="list-group-item list-group-item-success alert-success rounded-0"  id="userCon">
+                                        <div class="media">
+                                            <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                            <div class="media-body ml-4">
+                                                    @Html.ActionLink(item.username, "getMessages", new { idUsername = item.username })
+                                                <p class="font-italic mb-0 text-small">@item.emailUser</p>
                                             </div>
-                                            <p class="font-italic mb-0 text-small">@Veggie.Services.Storage.Instance.searchUsers.emailUser</p>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                }
                             }
                         </div>
                     </div>
                 </div>
-                <script type="text/javascript">
-                    $('#userCon').click(function () {
-                        var id = localStorage.getItem("idUser");
-                        $.get("/Chat/starConversation", { idUsername: id }, function (data) {
-                            location.reload();
-                        });
-                    }
-                    );
-                </script>
+               
             </div>
             <!-- Chat Box-->
             <div class="col-7 px-0 py-0">
-                <div class="px-4 py-5 chat-box bg-white" style="height: 556px">
+                <div class="bg-gray px-4 py-1 bg-light">
+                    @if (Veggie.Services.Storage.Instance.searchUsers.username != null)
+                    {
+                        <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.searchUsers.username</p>
+                    }
+                    else
+                    {
+                        <p class="h5 mb-0 py-1">Seleccione una conversación</p>
+                    }
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar mensaje" id="messageS" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary fa fa-search" id="searchMessage" type="button"></button>
+                        </div>
+                        <script type="text/javascript">
+                            $('#searchMessage').click(function () {
+                                var messageSearch = $("#messageS").val();
+                                $.get("/Chat/searchMessage", { searchMessage: messageSearch }, function (data) {
+                                    location.reload();
+                                });
+                            }
+                            );
+                        </script>
+                    </div>
+                </div>
+                <div class="px-4 py-5 chat-box bg-white" style="height: 462px">
 
                     @if (Veggie.Services.Storage.Instance.messages.Count != 0)
                     {
@@ -76,29 +90,28 @@
                                 <div class="media w-50 ml-auto mb-3">
                                     <div class="media-body">
                                         <div class="bg-primary rounded py-2 px-3 mb-2">
-                                            <p class="text-small mb-0 text-white">@item.messageInformation</p>
+                                            <p class="text-small mb-0 text-white">@item.message</p>
                                         </div>
-                                        <p class="small text-muted">12:00 PM | Aug 13</p>
+                                        <p class="small text-muted">@item.messageTime</p>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="media w-50 mb-3">
+                                    <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                    <div class="media-body ml-3">
+                                        <div class="bg-light rounded py-2 px-3 mb-2">
+                                            <p class="text-small mb-0 text-muted">@item.message</p>
+                                        </div>
+                                        <p class="small text-muted">@item.messageTime</p>
                                     </div>
                                 </div>
                             }
                         }
                     }
-                    <!-- Sender Message-->
-                    <div class="media w-50 mb-3">
-                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-                        <div class="media-body ml-3">
-                            <div class="bg-light rounded py-2 px-3 mb-2">
-                                <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-                            </div>
-                            <p class="small text-muted">12:00 PM | Aug 13</p>
-                        </div>
-                    </div>
-
-                    <!-- Reciever Message-->
 
                 </div>
-                <!-- Typing area -->
                 <form action="#" class="bg-light">
                     <div class="input-group">
                         <input type="text" placeholder="Type a message" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
