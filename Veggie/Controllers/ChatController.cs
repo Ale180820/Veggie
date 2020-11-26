@@ -37,7 +37,6 @@ namespace Veggie.Controllers {
             }
         }
 
-
         public Conversation create(User user, IFormCollection collection) {
             Conversation conversation = new Conversation();
             conversation.userOne = user;
