@@ -4,15 +4,6 @@
 
 @using (Html.BeginForm("Create", "Register", FormMethod.Post))
 {
-    if (ViewBag.smsFail != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
-            <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
 
     <link rel="stylesheet" href="~/lib/chat-style/chat.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -35,12 +26,15 @@
 
                 </div>
             </div>
-            <div id="search">
-                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input id="searchbar" onkeyup="search_animal()" type="text"
-                       name="search" placeholder="Search animals..">
 
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Buscar contacto..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success fa fa-search" type="button" id="button-addon2"></button>
+                </div>
             </div>
+
+         
 
             <div id="contacts">
                 <ul>
