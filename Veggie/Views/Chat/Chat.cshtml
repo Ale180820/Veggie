@@ -1,20 +1,14 @@
-﻿@{
+﻿@model VeggieBack.Models.User
+@{
     ViewData["Title"] = "Chat | Veggie";
 }
 
-@using (Html.BeginForm("Create", "Register", FormMethod.Post))
+@using (Html.BeginForm("Index", "Chat", FormMethod.Post))
 {
-    if (ViewBag.smsFail != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
-            <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
+    @Html.AntiForgeryToken()
 
     <link rel="stylesheet" href="~/lib/chat-style/chat.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <div id="frame" style="height: 900px" class="w-100 p-1">
@@ -35,96 +29,59 @@
 
                 </div>
             </div>
-            <div id="search">
-                <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-                <input id="searchbar" onkeyup="search_animal()" type="text"
-                       name="search" placeholder="Search animals..">
-
-            </div>
+            <form action="#!">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="username" placeholder="Buscar contacto..." aria-label="Buscar" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <input name="search" id="search" class="btn btn-outline-success fa fa-search" type="submit">
+                        <script type="text/javascript">
+                            $('#search').click(function () {
+                                var userName = $("#username").val();
+                                $.post("/Chat/SearchUser", { username: userName }, function (data) {
+                                });
+                            }
+                            );
+                        </script>
+                    </div>
+                </div>
+            </form>
 
             <div id="contacts">
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Louis Litt</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
+                @if (Veggie.Services.Storage.Instance.searchUser.username != null) {
+                    <ul>
+                        <li class="contact" id="user">
+                            <div class="wrap">
+                                @if (Veggie.Services.Storage.Instance.searchUser.statusUser == "Available"){
+                                    <span class="contact-status online"></span>
+                                }else{
+                                    <span class="contact-status offline"></span>
+                                }
+                                <img src="http://emilcarlsson.se/assets/donnapaulsen.png" alt="" />
+                                <div class="meta">
+                                    <p class="name" id="name">@Veggie.Services.Storage.Instance.searchUser.username</p>
+                                    <p class="preview">@Veggie.Services.Storage.Instance.searchUser.emailUser</p>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Andrea</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Andrea</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Mario</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Julia</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="contact users">
-                        <div class="wrap">
-                            <span class="contact-status online"></span>
-                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                            <div class="meta">
-                                <p class="name" id="name">Julio</p>
-                                <p class="preview">You just got LITT up, Mike.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                }
             </div>
-
-            <!-- linking javscript -->
-            <script src="/lib/chat-style/search.js"></script>
+            <script type="text/javascript">
+                $('#user').click(function () {
+                    var userName = $("#name").val();
+                    $.get("/Chat/starConversation", { name: userName }, function (data) {
+                    });
+                }
+                );
+            </script>
 
             <div id="bottom-bar">
                 <button id="addcontact"><i class="fa fa-user-plus" aria-hidden="true"></i> <span>Add contact</span></button>
                 <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
             </div>
         </div>
+
+
         <div class="content">
             <div class="contact-profile">
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />

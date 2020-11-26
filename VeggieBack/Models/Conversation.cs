@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace VeggieBack.Models {
-
+    //su
     public class Conversation {
 
         public static int codeConversation = 0;

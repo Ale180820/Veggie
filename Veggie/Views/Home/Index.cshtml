@@ -6,15 +6,6 @@
 {
     @Html.AntiForgeryToken()
 
-    if (ViewBag.smsFail != null) {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 25px; left: 680px;" role="alert">
-            <strong>Fallo al iniciar sesión: </strong> @ViewBag.smsFail
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
         <div class="container">
@@ -43,7 +34,7 @@
                                     $('#login').click(function () {
                                         var emailx = $("#email").val();
                                         $.get("/Home/GetID", { email: emailx }, function (data) {
-                                            localStorage.setItem("id", data);
+                                            localStorage.setItem("idUser", data);
                                         });
                                     }
                                     );
