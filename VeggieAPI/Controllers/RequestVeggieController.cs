@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using System.Collections.Generic;
+using VeggieBack.Controllers;
 using VeggieBack.Models;
 
 namespace VeggieAPI.Controllers {
@@ -71,13 +73,19 @@ namespace VeggieAPI.Controllers {
                 return StatusCode(500, "InternalServerError");
             }
         }
+
         #endregion
         [HttpPost("createConversation")]
         public ActionResult createConversation([FromBody] Entry userConversation) {
-
             try {
                 Conversation newConversation = new Conversation();
-                //newConversation.userOne = findUserById(int.Parse(userConversation.actualUser));
+                DiffieHellman df = new DiffieHellman();
+                df.GenerateKeys(104);
+                newConversation.userOne = findUserById(int.Parse(userConversation.actualUser));
+                newConversation.userTwo = findUserDataBaseByUsername(userConversation.sendUser);
+                newConversation.firstKey = df.getPublicOne();
+                newConversation.secondKey = df.getPublicTwo();
+                newConversation.messages = new List<Message>();
                 if (createNewConversation(newConversation)) {
                     return Ok();
                 }else {
@@ -86,17 +94,6 @@ namespace VeggieAPI.Controllers {
             }catch {
                 return StatusCode(500, "InternalServerError");
             }
-            //try {
-            //    conversation.userTwo = findUserDataBaseByUsername(conversation.userTwo.username);
-            //    if (createNewConversation(conversation)) {
-            //        return Ok();
-            //    } else {
-            //        return StatusCode(500, "InternalServerError");
-            //    }
-
-            //} catch {
-            //    return StatusCode(500, "InternalServerError");
-            //}
         }
 
         #region User back methods
@@ -108,6 +105,16 @@ namespace VeggieAPI.Controllers {
                 return true;
             } catch {
                 return false;
+            }
+        }
+
+        public User findUserById(int idUser){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("_id", idUser)).FirstOrDefault(); ;
+            }catch { 
+                return null;
             }
         }
 
@@ -163,20 +170,7 @@ namespace VeggieAPI.Controllers {
             } catch {
                 return false;
             }
-        }
-
-        public User  findUserById(int idUser) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("_id", idUser)).FirstOrDefault(); ;
-            } catch {
-                return null;
-            }
-        }
-
-        
-           
+        }           
      }
 }
 

@@ -43,7 +43,6 @@ namespace Veggie.Controllers {
             conversation.userOne = user;
             user.username = collection["user"];
             conversation.userTwo = user;
-            conversation.messages = new Dictionary<string, Message>();
             return conversation;
         }
        

@@ -48,28 +48,7 @@
 
 
             <div id="contacts">
-                @if (Veggie.Services.Storage.Instance.searchUsers != null)
-                {
-                    <ul>
-                        <li class="contact" id="user">
-                            <div class="wrap">
-                                @if (Veggie.Services.Storage.Instance.searchUsers.statusUser == "Available")
-                                {
-                                    <span class="contact-status online"></span>
-                                }
-                                else
-                                {
-                                    <span class="contact-status offline"></span>
-                                }
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                                <div class="meta">
-                                    <p class="name" id="name">@Veggie.Services.Storage.Instance.searchUsers.username</p>
-                                    <p class="preview">@Veggie.Services.Storage.Instance.searchUsers.emailUser</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                }
+               
             </div>
             <script type="text/javascript">
                 $('#user').click(function () {
