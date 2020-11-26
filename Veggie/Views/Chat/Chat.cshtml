@@ -29,26 +29,42 @@
 
                 </div>
             </div>
-
-            <div class="input-group mb-2">
-                <input type="text" class="form-control" id="username" placeholder="Buscar contacto..." aria-label="Buscar" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <input name="search" id="search" class="btn btn-outline-success fa fa-search" type="submit">
-                    <script type="text/javascript">
-                        $('#search').click(function () {
-                            var userName = $("#username").val();
-                            $.get("/Chat/SearchUser", { username: userName }, function (data) {
-                            });
-                        }
-                        );
-                    </script>
+            <form action="#!">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="username" placeholder="Buscar contacto..." aria-label="Buscar" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <input name="search" id="search" class="btn btn-outline-success fa fa-search" type="submit">
+                        <script type="text/javascript">
+                            $('#search').click(function () {
+                                var userName = $("#username").val();
+                                $.post("/Chat/SearchUser", { username: userName }, function (data) {
+                                });
+                            }
+                            );
+                        </script>
+                    </div>
                 </div>
-            </div>
-
-
+            </form>
 
             <div id="contacts">
-               
+                @if (Veggie.Services.Storage.Instance.searchUser.username != null) {
+                    <ul>
+                        <li class="contact" id="user">
+                            <div class="wrap">
+                                @if (Veggie.Services.Storage.Instance.searchUser.statusUser == "Available"){
+                                    <span class="contact-status online"></span>
+                                }else{
+                                    <span class="contact-status offline"></span>
+                                }
+                                <img src="http://emilcarlsson.se/assets/donnapaulsen.png" alt="" />
+                                <div class="meta">
+                                    <p class="name" id="name">@Veggie.Services.Storage.Instance.searchUser.username</p>
+                                    <p class="preview">@Veggie.Services.Storage.Instance.searchUser.emailUser</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                }
             </div>
             <script type="text/javascript">
                 $('#user').click(function () {
