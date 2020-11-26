@@ -1,9 +1,0 @@
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.deps.json
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.dll
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\bin\Debug\netcoreapp3.1\VeggieBack.pdb
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csprojAssemblyReference.cache
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.AssemblyInfoInputs.cache
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.AssemblyInfo.cs
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.csproj.CoreCompileInputs.cache
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.dll
-C:\Users\ayalr\source\repos\Veggie\VeggieBack\obj\Debug\netcoreapp3.1\VeggieBack.pdb
