@@ -99,15 +99,19 @@ namespace Veggie.Controllers {
         public ActionResult SendMessage(string message) {
             DateTime now = DateTime.Now;
             var userLogin = new Message {
-                receivingUser = Storage.Instance.searchUsers.username,
+                receivingUser = Storage.Instance.actualConversation.sendUser,
                 sendingUser = Storage.Instance.idUser.ToString(),
                 message = message,
                 messageTime = now,
                 typeMessage = true
             };
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
-            var messageSend = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            var response = APIConnection.WebApliClient.PostAsync("api/sendMessage", messageSend).Result;
+            var messageSend = new SendMessage {
+                messageSend = userLogin,
+                idConversation = Storage.Instance.conversationId
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(messageSend);
+            var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/sendMessage", messageS).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
@@ -117,8 +121,16 @@ namespace Veggie.Controllers {
         }
 
         //Search message
-        public void searchMessage(string searchMessage) {
-
+        public ActionResult searchMessage(string searchMessage) {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(searchMessage);
+            var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/searchMessage", messageS).Result;
+            if (response.IsSuccessStatusCode) {
+                var result = response.Content.ReadAsStringAsync().Result;
+                var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
+                Storage.Instance.messages = sendMessage;
+            }
+            return RedirectToAction("Index", "Chat");
         }
 
         //Refresh chat 
