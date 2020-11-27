@@ -6,6 +6,22 @@
 @using (Html.BeginForm("Index", "Chat", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 1000px; left: 680px;" role="alert">
+        <strong>¡Error! </strong> @ViewBag.Message
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 1000px; left: 680px;" role="alert">
+            <strong>¡Error! </strong> @ViewBag.Message
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -34,14 +50,16 @@
                     </div>
                     <div class="messages-box">
                         <div class="list-group rounded-0" id="user">
-                            @if (Veggie.Services.Storage.Instance.contacts.Count != 0) {
-                                foreach (var item in Veggie.Services.Storage.Instance.contacts) {
+                            @if (Veggie.Services.Storage.Instance.contacts.Count != 0)
+                            {
+                                foreach (var item in Veggie.Services.Storage.Instance.contacts)
+                                {
                                     <a class="list-group-item list-group-item-success alert-success rounded-0" id="userCon">
                                         <div class="media">
                                             <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
                                             <div class="media-body ml-4">
                                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                                    <h6  class="mb-0" onclick="location.href='@Url.Action("getMessages", new { usernameS = item.username })'">@item.username</h6>
+                                                    <h6 class="mb-0" onclick="location.href='@Url.Action("getMessages", new { usernameS = item.username })'">@item.username</h6>
                                                     @*<h6 class="mb-0" >@Html.ActionLink(item.username, "getMessages", new { usernameS = item.username })</h6>*@
                                                 </div>
                                                 <p class="font-italic mb-0 text-small">@item.email</p>
@@ -124,7 +142,7 @@
                     }
 
                 </div>
-                
+
                 <form action="#" class="bg-light">
                     <div class="input-group">
                         <div class="input-group-prepend">

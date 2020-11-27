@@ -23,7 +23,7 @@ namespace Veggie.Controllers {
 
         public ActionResult Index() {
             if (TempData["smsFail"] != null) {
-                ViewBag.Message = TempData["smsFail"].ToString();
+                ViewBag.Message = "No ha sido posible iniciar sesión, intentelo nuevamente.";
             }
             return View();
         }

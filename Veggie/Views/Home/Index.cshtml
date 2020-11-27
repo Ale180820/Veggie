@@ -5,10 +5,10 @@
 @using (Html.BeginForm("Login", "Home", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    if (ViewBag.smsFail != null)
+    if (ViewBag.Message != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 50px; left: 700px;" role="alert">
-            <strong>Error: </strong> @ViewBag.smsFail
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 25px; left: 680px;" role="alert">
+            <strong>¡Error! </strong> @ViewBag.Message
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
