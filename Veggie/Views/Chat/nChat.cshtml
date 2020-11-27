@@ -88,12 +88,9 @@
                 </div>
                 <div class="px-4 py-5 chat-box bg-white" style="height: 462px">
 
-                    @if (Veggie.Services.Storage.Instance.messages.Count != 0)
-                    {
-                        foreach (var item in Veggie.Services.Storage.Instance.messages)
-                        {
-                            if (item.receivingUser == Veggie.Services.Storage.Instance.searchUsers.username)
-                            {
+                    @if (Veggie.Services.Storage.Instance.messages.Count != 0) {
+                        foreach (var item in Veggie.Services.Storage.Instance.messages) {
+                            if (item.receivingUser == Veggie.Services.Storage.Instance.actualConversation.sendUser) {
                                 <div class="media w-50 ml-auto mb-3">
                                     <div class="media-body">
                                         <div class="bg-primary rounded py-2 px-3 mb-2">
@@ -103,8 +100,7 @@
                                     </div>
                                 </div>
                             }
-                            else
-                            {
+                            else {
                                 <div class="media w-50 mb-3">
                                     <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
                                     <div class="media-body ml-3">
@@ -116,7 +112,7 @@
                                 </div>
                             }
                         }
-                    }
+                     }
 
                 </div>
 

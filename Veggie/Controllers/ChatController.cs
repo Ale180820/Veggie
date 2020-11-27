@@ -131,16 +131,20 @@ namespace Veggie.Controllers {
             }
         }
 
-
+        #region Messages
         //Search message
         public ActionResult searchMessage(string searchMessage) {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(searchMessage);
+            FindMessage findMessage = new FindMessage {
+                idConversation = Storage.Instance.idUser,
+                message = searchMessage
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(findMessage);
             var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = APIConnection.WebApliClient.PostAsync("api/searchMessage", messageS).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
-                Storage.Instance.messages = sendMessage;
+                Storage.Instance.findMessages = sendMessage;
             }
             return RedirectToAction("Index", "Chat");
         }
@@ -178,6 +182,8 @@ namespace Veggie.Controllers {
                 return RedirectToAction("Index", "Chat");
             }
         }
+
+        //Find ID conversation
         public int findConversationId(string username) {
             var find = 0;
             foreach (var item in Storage.Instance.conversations) {
@@ -198,7 +204,7 @@ namespace Veggie.Controllers {
             }
         }
 
-
+        //Update the conversations
         public bool fillConversations() {
             var userConver = Storage.Instance.idUser;
             var jsonU = Newtonsoft.Json.JsonConvert.SerializeObject(userConver);
@@ -212,6 +218,9 @@ namespace Veggie.Controllers {
             }
             return false;
         }
+        #endregion
+
+
 
     }
 }
