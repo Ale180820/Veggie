@@ -175,10 +175,10 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("getConversationByUserId")]
-        public ActionResult getConversationByUserId([FromBody] string idUser) {
+        public ActionResult getConversationByUserId([FromBody] int idUser) {
             List<Conversation> conversationsReturn = new List<Conversation>();
-            List<Conversation> firstResult = getConversationByUser(int.Parse(idUser), true);
-            List<Conversation> secondResult = getConversationByUser(int.Parse(idUser), false);
+            List<Conversation> firstResult = getConversationByUser(idUser, true);
+            List<Conversation> secondResult = getConversationByUser(idUser, false);
             if (secondResult != null && firstResult != null) {
                 foreach (Conversation item in firstResult) {
                     conversationsReturn.Add(item);
@@ -196,12 +196,28 @@ namespace VeggieAPI.Controllers {
         public ActionResult sendMessage([FromBody] Message message) {
             try {
                 if (sendMessageInConversation(message)) {
-                    return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
+                    return Ok();
+                    //return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
                 } else {
                     return StatusCode(500, "InternalServerError");
                 }
             } catch {
                 return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        [HttpPost("getSpecificMessage")]
+        public ActionResult getSpecificMessages([FromBody] FindMessage find){
+            List<Message> messages = new List<Message>();
+            try{
+                foreach (Message message in findConversationById(find.idConversation)){
+                    if (message.message.Equals(find.message)){
+                        messages.Add(message);
+                    }
+                }
+                return Ok(messages);
+            }catch{
+                return Ok(messages);
             }
         }
 
