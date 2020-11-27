@@ -113,12 +113,24 @@ namespace Veggie.Controllers {
             var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = APIConnection.WebApliClient.PostAsync("api/sendMessage", messageS).Result;
             if (response.IsSuccessStatusCode) {
-                var result = response.Content.ReadAsStringAsync().Result;
-                var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
-                Storage.Instance.messages = sendMessage;
+                refreshChat();
             }
             return RedirectToAction("Index", "Chat");
         }
+
+        public void refreshChat() {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(Storage.Instance.conversationId);
+            var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/getAllMessage", user).Result;
+            if (response.IsSuccessStatusCode) {
+                var result = response.Content.ReadAsStringAsync().Result;
+                var search = JsonSerializer.Deserialize<List<Message>>(result);
+                if (search.Count != 0) {
+                    Storage.Instance.messages = search;
+                }
+            }
+        }
+
 
         //Search message
         public ActionResult searchMessage(string searchMessage) {
@@ -153,6 +165,9 @@ namespace Veggie.Controllers {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var search = JsonSerializer.Deserialize<List<Message>>(result);
                 if (search.Count!=0) {
+                    Storage.Instance.messages = search;
+                }
+                else {
                     Storage.Instance.messages = search;
                 }
                 return RedirectToAction("Index", "Chat");
