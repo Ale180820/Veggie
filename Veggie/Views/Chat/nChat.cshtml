@@ -23,8 +23,8 @@
                             </div>
                             <script type="text/javascript">
                                 $('#searchBar').click(function () {
-                                    var id = localStorage.getItem("idUser");
-                                    $.get("/Chat/SearchUser", { idUser: id }, function (data) {
+                                    var username = $("#username").val();
+                                    $.get("/Chat/SearchUser", { username: username }, function (data) {
                                         location.reload();
                                     });
                                 }
