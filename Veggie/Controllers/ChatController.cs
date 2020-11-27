@@ -98,13 +98,20 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult sendM(IFormFile file)
         {
+          
+            //var messageSend = new SendMessage
+            //{
+            //    messageSend = userLogin,
+            //    idConversation = Storage.Instance.conversationId
+            //};
+            //var json = Newtonsoft.Json.JsonConvert.SerializeObject(messageSend);
+            //var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            //var response = APIConnection.WebApliClient.PostAsync("api/sendMessage", messageS).Result;
+            //if (response.IsSuccessStatusCode) {
+            //    refreshChat();
+            //}
             return RedirectToAction("Index", "Chat");
         }
-
-        //public FileResult file(string path)
-        //{
-
-        //}
 
         //Method for send message to others people
         public ActionResult SendMessage(string message) {

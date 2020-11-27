@@ -3,7 +3,6 @@
     ViewData["Title"] = "Chat | Veggie";
 }
 
-@using (Html.BeginForm("Index", "Chat", FormMethod.Post)) {
     if (ViewBag.Message != null) {
         <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 10px; left: 680px;" role="alert">
             <strong>¡Error! </strong> @ViewBag.Message
@@ -118,23 +117,25 @@
                             }
                         }
                     }
-                    
+
                 </div>
-                <div class="collapse" style="position: absolute; top: 460px; left: 170px" id="collapseExample">
+                <div class="collapse" style="position: absolute; top: 460px; left: 120px" id="collapseExample">
                     <div class="card card-body">
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupFileAddon01">Archivo</span>
-                            </div>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                <label class="custom-file-label" for="inputGroupFile01">Elige un archivo</label>
-                            </div>
+                            @using (Html.BeginForm("sendM", "Chat", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="file" id="file" aria-describedby="inputGroupFileAddon01">
+                                    <label class="custom-file-label" for="file">Elige un archivo</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary fa fa-paper-plane" type="submit" id="button-addon2"></button>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
                 <form action="#" class="bg-light">
-                    
+
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <button class="btn btn-light fa fa-redo-alt" id="refresh" type="button"></button>
@@ -169,4 +170,3 @@
             </div>
         </div>
     </div>
-}
