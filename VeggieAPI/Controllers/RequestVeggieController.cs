@@ -67,8 +67,6 @@ namespace VeggieAPI.Controllers {
             }else {
                 return StatusCode(500, "InternalServerError");
             }
-            
-            
         }
 
         #region [User] Methods for communication with the database
@@ -177,10 +175,10 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("getConversationByUserId")]
-        public ActionResult getConversationByUserId([FromBody] int idUser){
+        public ActionResult getConversationByUserId([FromBody] string idUser){
             List<Conversation> conversationsReturn = new List<Conversation>();
-            List<Conversation> firstResult = getConversationByUser(idUser, true);
-            List<Conversation> secondResult = getConversationByUser(idUser, false);
+            List<Conversation> firstResult = getConversationByUser(int.Parse(idUser), true);
+            List<Conversation> secondResult = getConversationByUser(int.Parse(idUser), false);
             if (secondResult != null && firstResult != null) {
                 foreach (Conversation item in firstResult){
                     conversationsReturn.Add(item);
@@ -315,8 +313,8 @@ namespace VeggieAPI.Controllers {
                       
                 }
                 var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq(typeFilter, idUser);
-                var result = Models.MongoHelper.conversations_collection.Find(filter);
-                return (List<Conversation>) result;
+                var list = Models.MongoHelper.conversations_collection.Find(filter).ToListAsync();
+                return list.Result;
             }
             catch {
                 return null;
