@@ -196,12 +196,28 @@ namespace VeggieAPI.Controllers {
         public ActionResult sendMessage([FromBody] Message message) {
             try {
                 if (sendMessageInConversation(message)) {
-                    return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
+                    return Ok();
+                    //return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
                 } else {
                     return StatusCode(500, "InternalServerError");
                 }
             } catch {
                 return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        [HttpPost("getSpecificMessage")]
+        public ActionResult getSpecificMessages([FromBody] FindMessage find){
+            List<Message> messages = new List<Message>();
+            try{
+                foreach (Message message in findConversationById(find.idConversation)){
+                    if (message.message.Equals(find.message)){
+                        messages.Add(message);
+                    }
+                }
+                return Ok(messages);
+            }catch{
+                return Ok(messages);
             }
         }
 
