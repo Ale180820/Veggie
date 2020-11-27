@@ -10,6 +10,7 @@ using Veggie.System;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 using System.Text.Json;
+using Veggie.Services;
 
 namespace Veggie.Controllers {
     public class HomeController : Controller {
@@ -39,13 +40,15 @@ namespace Veggie.Controllers {
         [HttpPost]
         public ActionResult Login(IFormCollection collection) {
             try {
-                
+                GetID(collection["email"]);
                 var userLogin = constructObject(collection);
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
                 var response = APIConnection.WebApliClient.PostAsync("api/login", user).Result;
                 if (response.IsSuccessStatusCode) {
+                    fillConversations();
                     return RedirectToAction("Index", "Chat");
+
                 } else {
                     TempData["smsFail"] = "No ha sido posible iniciar sesión, intentelo nuevamente.";
                     return RedirectToAction("Index", "Home");
@@ -57,18 +60,37 @@ namespace Veggie.Controllers {
             }
         }
 
-        public void getUserLogin(string userLogin) {
-            string id = "";
-            if (userLogin != null) {
-                id = userLogin;
-                
+        //Get created conversations
+        public bool fillConversations() {
+            var userConver = Storage.Instance.idUser;
+            var jsonU = Newtonsoft.Json.JsonConvert.SerializeObject(userConver);
+            var userU = new StringContent(jsonU.ToString(), Encoding.UTF8, "application/json");
+            var responseU = APIConnection.WebApliClient.PostAsync("api/getConversationByUserId", userU).Result;
+            if (responseU.IsSuccessStatusCode) {
+                var resultUser = responseU.Content.ReadAsStringAsync().Result;
+                var contactsU = JsonSerializer.Deserialize<List<Conversation>>(resultUser);
+                Storage.Instance.conversations = contactsU;
+                foreach (var item in Storage.Instance.conversations) {
+                    if (item.userOne._id != Storage.Instance.idUser) {
+                        Contacts userC = new Contacts {
+                            username = item.userOne.username,
+                            email = item.userOne.emailUser
+                        };
+                        Storage.Instance.contacts.Add(userC);
+                    }
+                    else if (item.userTwo._id != Storage.Instance.idUser) {
+                        Contacts userC = new Contacts {
+                            username = item.userTwo.username,
+                            email = item.userTwo.emailUser
+                        };
+                        Storage.Instance.contacts.Add(userC);
+                    }
+                }
+                return true;
             }
-            else {
-                id = "null";                
-            }
+            return false;
         }
 
-        
 
         public string GetID(string email) {
             var userLogin = new User {
@@ -80,6 +102,7 @@ namespace Veggie.Controllers {
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var id = JsonSerializer.Deserialize<User>(result);
+                Storage.Instance.idUser = id._id;
                 return id._id.ToString();
             }
             else {

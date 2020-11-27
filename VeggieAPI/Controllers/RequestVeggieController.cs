@@ -45,6 +45,9 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByUsernameExist")]
         public ActionResult findUserExist([FromBody] string username) {
             User newUser = findUserDataBaseByUsername(username);
+            if (newUser == null) {
+                return StatusCode(500, "InternalServerError");
+            }
             newUser.nameUser = null;
             newUser.password = null;
             newUser.lastNameUser = null;
@@ -168,11 +171,11 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("getConversationByUserId")]
-        public ActionResult getConversationByUserId(string idUser){
+        public ActionResult getConversationByUserId([FromBody] int idUser){
             List<Conversation> conversationsReturn = new List<Conversation>();
-            List<Conversation> firstResult = getConversationByUser(int.Parse(idUser), true);
-            List<Conversation> secondResult = getConversationByUser(int.Parse(idUser), false);
-            if (secondResult.Count != 0 && firstResult.Count != 0) {
+            List<Conversation> firstResult = getConversationByUser(idUser, true);
+            List<Conversation> secondResult = getConversationByUser(idUser, false);
+            if (secondResult != null && firstResult != null) {
                 foreach (Conversation item in firstResult){
                     conversationsReturn.Add(item);
                 }
