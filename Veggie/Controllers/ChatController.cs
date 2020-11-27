@@ -209,6 +209,7 @@ namespace Veggie.Controllers {
                     var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
                     Storage.Instance.findMessages = sendMessage;
                 }
+                TempData["search"] = "...";
                 return RedirectToAction("Index", "Chat");
             }
             catch (Exception) {

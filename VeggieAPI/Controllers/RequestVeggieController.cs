@@ -200,11 +200,26 @@ namespace VeggieAPI.Controllers {
         [HttpPost("sendMessage")]
         public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
-                if (sendMessageInConversation(message)) {
-                    return Ok();
-                } else {
-                    return StatusCode(500, "InternalServerError");
+                if (message.typeMessage)
+                {
+                    if (sendMessageInConversation(message))
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(500, "InternalServerError");
+                    }
                 }
+                //Cambiar por lo del archivo
+                return StatusCode(500, "InternalServerError");
+                //}else {
+                //    //if () {
+
+                //    //}else {
+
+                //    //}
+                //}
             } catch {
                 return StatusCode(500, "InternalServerError");
             }
@@ -214,8 +229,9 @@ namespace VeggieAPI.Controllers {
         public ActionResult getSpecificMessages([FromBody] FindMessage find){
             List<Message> messages = new List<Message>();
             try{
-                foreach (Message message in findConversationById(find.idConversation)){
-                    if (message.message.Contains(find.message)){
+                var conversation = findConversationByIdConversation(find.idConversation);
+                foreach (Message message in conversation.messages){
+                    if (message.message.Contains(decryptionMessage(message, find.idConversation).message)){
                         messages.Add(message);
                     }
                 }
