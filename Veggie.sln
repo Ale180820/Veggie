@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veggie", "Veggie\Veggie.csproj", "{9ADC40B7-E94B-4D97-9BAC-7E87939A8E23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veggie", "Veggie\Veggie.csproj", "{9ADC40B7-E94B-4D97-9BAC-7E87939A8E23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeggieAPI", "VeggieAPI\VeggieAPI.csproj", "{5D954C1A-BCE5-4D78-B8D4-5DCA0FE26468}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeggieBack", "VeggieBack\VeggieBack.csproj", "{B6DC18B4-C8DD-4758-B118-67691DF41848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{9ADC40B7-E94B-4D97-9BAC-7E87939A8E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ADC40B7-E94B-4D97-9BAC-7E87939A8E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ADC40B7-E94B-4D97-9BAC-7E87939A8E23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D954C1A-BCE5-4D78-B8D4-5DCA0FE26468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D954C1A-BCE5-4D78-B8D4-5DCA0FE26468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D954C1A-BCE5-4D78-B8D4-5DCA0FE26468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D954C1A-BCE5-4D78-B8D4-5DCA0FE26468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DC18B4-C8DD-4758-B118-67691DF41848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DC18B4-C8DD-4758-B118-67691DF41848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DC18B4-C8DD-4758-B118-67691DF41848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DC18B4-C8DD-4758-B118-67691DF41848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
