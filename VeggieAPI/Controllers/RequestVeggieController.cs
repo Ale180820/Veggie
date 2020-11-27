@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using VeggieAPI.Services;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 
@@ -193,11 +192,10 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("sendMessage")]
-        public ActionResult sendMessage([FromBody] Message message) {
+        public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
                 if (sendMessageInConversation(message)) {
                     return Ok();
-                    //return Ok(decryptionMessages(findConversationById(Storage.Instance.actualConversation._id)));
                 } else {
                     return StatusCode(500, "InternalServerError");
                 }
@@ -226,6 +224,7 @@ namespace VeggieAPI.Controllers {
             try {
                 List<Message> messageSends = new List<Message>();
                 messageSends = findConversationById(idConversation);
+                messageSends = decryptionMessages(messageSends, idConversation);
                 return Ok(messageSends);
             } catch{
                 return StatusCode(500, "InternalServerError");
@@ -276,19 +275,19 @@ namespace VeggieAPI.Controllers {
             }
         }
         
-        public bool sendMessageInConversation(Message message) {
+        public bool sendMessageInConversation(SendMessage message) {
             try {
-                SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
-                DiffieHellman df = new DiffieHellman();
-                message.message = encryption.CifradoDecifrado(message.message, true, df.getPrivateKey(Storage.Instance.actualConversation.firstKey, Storage.Instance.actualConversation.secondKey));
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
-                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", Storage.Instance.actualConversation);
-                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
-                    result.messages.Add(message);
-                var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", result.messages);
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                SDES encryption = new SDES();
+                DiffieHellman df = new DiffieHellman();
+                message.messageSend.message = encryption.CifradoDecifrado(message.messageSend.message, true, df.getPrivateKey(conversation.firstKey, conversation.secondKey));
+                conversation.messages.Add(message.messageSend);
+                var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", conversation.messages);
                 var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);    
-                    return true;
+                return true;
             } catch {
                 return false;
             }
@@ -364,16 +363,20 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        public List<Message> decryptionMessages(List<Message> messages){
+        public List<Message> decryptionMessages(List<Message> messages, int idConversation){
             List<Message> decryptMessage = new List<Message>();
-            foreach (var message in messages) {
+            Models.MongoHelper.ConnectToMongoService();
+            Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+            var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+            var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+            foreach (var message in messages){
                 SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
                 DiffieHellman df = new DiffieHellman();
-                message.message = encryption.CifradoDecifrado(message.message, false, df.getPrivateKey(Storage.Instance.actualConversation.firstKey, Storage.Instance.actualConversation.secondKey));
+                message.message = encryption.CifradoDecifrado(message.message, false, df.getPrivateKey(conversation.firstKey, conversation.secondKey));
                 decryptMessage.Add(message);
             }
             return decryptMessage;
         }
-     }
+    }
 }
 
