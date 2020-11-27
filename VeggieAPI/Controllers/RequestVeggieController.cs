@@ -61,8 +61,14 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] User email) {
             User newUser = new User();
-            newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
-            return Ok(newUser);
+            if(findUserDataBaseByEmail(email.emailUser) != null){
+                newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
+                return Ok(newUser);
+            }else {
+                return StatusCode(500, "InternalServerError");
+            }
+            
+            
         }
 
         #region [User] Methods for communication with the database
@@ -179,7 +185,6 @@ namespace VeggieAPI.Controllers {
                 foreach (Conversation item in firstResult){
                     conversationsReturn.Add(item);
                 }
-
                 foreach (Conversation item in secondResult){
                     conversationsReturn.Add(item);
                 }
@@ -201,6 +206,8 @@ namespace VeggieAPI.Controllers {
                 return StatusCode(500, "InternalServerError");
             }
         }
+
+        
 
         [HttpPost("getMessagesConversation")]
         public ActionResult getConversation([FromBody] Entry userConversation){
