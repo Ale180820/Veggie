@@ -7,7 +7,6 @@ namespace VeggieBack.Models{
 
         public int idConversation { get; set; }
         public string message { get; set; }
-
         public FindMessage() { }
     }
 }
