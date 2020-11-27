@@ -61,10 +61,10 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] User email) {
             User newUser = new User();
-            if(findUserDataBaseByEmail(email.emailUser) != null){
+            if (findUserDataBaseByEmail(email.emailUser) != null) {
                 newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
                 return Ok(newUser);
-            }else {
+            } else {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -175,19 +175,19 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("getConversationByUserId")]
-        public ActionResult getConversationByUserId([FromBody] int idUser){
+        public ActionResult getConversationByUserId([FromBody] int idUser) {
             List<Conversation> conversationsReturn = new List<Conversation>();
             List<Conversation> firstResult = getConversationByUser(idUser, true);
             List<Conversation> secondResult = getConversationByUser(idUser, false);
             if (secondResult != null && firstResult != null) {
-                foreach (Conversation item in firstResult){
+                foreach (Conversation item in firstResult) {
                     conversationsReturn.Add(item);
                 }
-                foreach (Conversation item in secondResult){
+                foreach (Conversation item in secondResult) {
                     conversationsReturn.Add(item);
                 }
                 return Ok(conversationsReturn);
-            }else {
+            } else {
                 return Ok(conversationsReturn);
             }
         }
@@ -205,7 +205,16 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        
+        [HttpPost("getAllMessage")]
+        public ActionResult getAllMessagesConversation([FromBody] int idConversation) {
+            try {
+                List<Message> messageSends = new List<Message>();
+                messageSends = findConversationById(idConversation);
+                return Ok(messageSends);
+            } catch{
+                return StatusCode(500, "InternalServerError");
+            }
+        }
 
         [HttpPost("getMessagesConversation")]
         public ActionResult getConversation([FromBody] Entry userConversation){

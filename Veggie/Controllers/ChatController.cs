@@ -122,8 +122,8 @@ namespace Veggie.Controllers {
         }
 
         //Refresh chat 
-        public ActionResult refresh(string id) {
-            return RedirectToAction("Index", "Chat");
+        public void refresh(string actual) {
+            getMessages(Storage.Instance.actualConversation.sendUser);
         }
 
         //Method for get (if exist) message
@@ -139,8 +139,8 @@ namespace Veggie.Controllers {
             var response = APIConnection.WebApliClient.PostAsync("api/getAllMessage", user).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
-                if (result != "false") {
-                    var search = JsonSerializer.Deserialize<List<Message>>(result);
+                var search = JsonSerializer.Deserialize<List<Message>>(result);
+                if (search.Count!=0) {
                     Storage.Instance.messages = search;
                 }
                 return RedirectToAction("Index", "Chat");
@@ -152,17 +152,21 @@ namespace Veggie.Controllers {
         }
         public int findConversationId(string username) {
             var find = 0;
-            var find2 = 0;
-            find = Storage.Instance.conversations.Find(x => x.userOne.username == username)._id;
-            find2 = Storage.Instance.conversations.Find(x => x.userTwo.username == username)._id;
-            if (find != 0) {
+            foreach (var item in Storage.Instance.conversations) {
+                if (item.userOne.username.Equals(username)) {
+                    find = item._id;
+                }
+            }
+            if (find == 0) {
+                foreach (var item in Storage.Instance.conversations) {
+                    if (item.userTwo.username.Equals(username)) {
+                        find = item._id;
+                    }
+                }
                 return find;
             }
-            else if (find2!=0) {
-                return find2;
-            }
             else {
-                return 0;
+                return find;
             }
         }
     }
