@@ -5,17 +5,10 @@
 
 @using (Html.BeginForm("Index", "Chat", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
-    <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 1000px; left: 680px;" role="alert">
-        <strong>¡Error! </strong> @ViewBag.Message
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-
+   
     if (ViewBag.Message != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 1000px; left: 680px;" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 10px; left: 680px;" role="alert">
             <strong>¡Error! </strong> @ViewBag.Message
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -25,7 +18,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <div class="container py-5 px-4">
+    <div class="container py-5 px-4" style="top: 200px;">
         <div class="row rounded-lg overflow-hidden shadow">
             <!-- Users box-->
             <div class="col-5 px-0">

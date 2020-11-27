@@ -28,7 +28,7 @@ namespace Veggie.Controllers {
                 return RedirectToAction("Index", "Chat");
             }
         }
-
+        #region Search users
         //Search and star conversation with a user
         public ActionResult SearchUser(string username) {
             try {
@@ -93,7 +93,7 @@ namespace Veggie.Controllers {
                 Storage.Instance.contacts.Add(newUser);
             }
         }
-
+        #endregion
 
         //Method for send message to others people
         public ActionResult SendMessage(string message) {
@@ -132,10 +132,11 @@ namespace Veggie.Controllers {
                 actualUser = Storage.Instance.idUser.ToString(),
                 sendUser = usernameS
             };
+            Storage.Instance.conversationId = findConversationId(usernameS);
             Storage.Instance.actualConversation = userLogin;
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(Storage.Instance.conversationId);
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            var response = APIConnection.WebApliClient.PostAsync("api/findConversationByUsers", user).Result;
+            var response = APIConnection.WebApliClient.PostAsync("api/getAllMessage", user).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
                 if (result != "false") {
@@ -148,6 +149,21 @@ namespace Veggie.Controllers {
                 TempData["smsFail"] = "...";
                 return RedirectToAction("Index", "Chat");
             }
-        }  
+        }
+        public int findConversationId(string username) {
+            var find = 0;
+            var find2 = 0;
+            find = Storage.Instance.conversations.Find(x => x.userOne.username == username)._id;
+            find2 = Storage.Instance.conversations.Find(x => x.userTwo.username == username)._id;
+            if (find != 0) {
+                return find;
+            }
+            else if (find2!=0) {
+                return find2;
+            }
+            else {
+                return 0;
+            }
+        }
     }
 }
