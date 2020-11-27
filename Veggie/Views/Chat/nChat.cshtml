@@ -47,7 +47,7 @@
         <div class="col-5 px-0">
             <div class="bg-white">
                 <div class="bg-white px-4 py-1 bg-light">
-                    <div class="brand-wrapper" height="20px">
+                    <div class="brand-wrapper" style="left:95px; top:25px; position:relative;" height="20px">
                         <img src="~/assets/img/Logo.png" alt="logo" class="logo">
                     </div>
                     <p class="h5 mb-0 py-1">Conversaciones</p>
@@ -127,7 +127,7 @@
                     {
                         if (item.messageSend.receivingUser == Veggie.Services.Storage.Instance.actualConversation.sendUser)
                         {
-                            if (item.fileSend == null)
+                            if (item.typeMessage == true)
                             {
                                 <div class="media w-50 ml-auto mb-3">
                                     <div class="media-body">
@@ -159,7 +159,7 @@
                         }
                         else
                         {
-                            if (item.fileSend == null)
+                            if (item.typeMessage == true)
                             {
                                 <div class="media w-50 mb-3">
                                     <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
