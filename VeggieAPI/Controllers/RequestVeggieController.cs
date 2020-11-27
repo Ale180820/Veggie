@@ -209,7 +209,7 @@ namespace VeggieAPI.Controllers {
             List<Message> messages = new List<Message>();
             try{
                 foreach (Message message in findConversationById(find.idConversation)){
-                    if (message.message.Equals(find.message)){
+                    if (message.message.Contains(find.message)){
                         messages.Add(message);
                     }
                 }
