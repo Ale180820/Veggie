@@ -3,6 +3,10 @@
 namespace VeggieBack.Models {
     public class Message {
 
+        /// <summary>
+        /// Method that will call the interface method
+        /// </summary>
+
         public static int codeMessage = 0;
         public int _id { get; set; }
         public string sendingUser { get; set; }
