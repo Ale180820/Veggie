@@ -23,8 +23,8 @@
                             </div>
                             <script type="text/javascript">
                                 $('#searchBar').click(function () {
-                                    var userName = $("#username").val();
-                                    $.get("/Chat/SearchUser", { username: userName }, function (data) {
+                                    var id = localStorage.getItem("idUser");
+                                    $.get("/Chat/SearchUser", { idUser: id }, function (data) {
                                         location.reload();
                                     });
                                 }
@@ -36,13 +36,15 @@
                         <div class="list-group rounded-0" id="user">
                             @if (Veggie.Services.Storage.Instance.contacts.Count != 0) {
                                 foreach (var item in Veggie.Services.Storage.Instance.contacts) {
-                                    <a class="list-group-item list-group-item-success alert-success rounded-0"  id="userCon">
+                                    <a class="list-group-item list-group-item-success alert-success rounded-0" id="userCon">
                                         <div class="media">
                                             <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-                                            @Html.ActionLink(item.username, "getMessages", new { idUsername = item.username })
-                                            <p class="font-italic mb-0 text-small">@item.emailUser</p>
                                             <div class="media-body ml-4">
-
+                                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                                    <h6  class="mb-0" onclick="location.href='@Url.Action("getMessages", new { usernameS = item.username })'">@item.username</h6>
+                                                    @*<h6 class="mb-0" >@Html.ActionLink(item.username, "getMessages", new { usernameS = item.username })</h6>*@
+                                                </div>
+                                                <p class="font-italic mb-0 text-small">@item.email</p>
                                             </div>
                                         </div>
                                     </a>
@@ -51,14 +53,23 @@
                         </div>
                     </div>
                 </div>
-               
             </div>
             <!-- Chat Box-->
             <div class="col-7 px-0 py-0">
                 <div class="bg-gray px-4 py-1 bg-light">
+                    <script type="text/javascript">
+                        $('#refresh').click(function () {
+                            var messageSearch = $("#messageS").val();
+                            $.get("/Chat/searchMessage", { searchMessage: messageSearch }, function (data) {
+                                location.reload();
+                            });
+                        }
+                        );
+                    </script>
+
                     @if (Veggie.Services.Storage.Instance.searchUsers.username != null)
                     {
-                        <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.searchUsers.username</p>
+                        <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.actualConversation.sendUser</p>
                     }
                     else
                     {
@@ -113,10 +124,15 @@
                     }
 
                 </div>
+                
                 <form action="#" class="bg-light">
                     <div class="input-group">
-                        <input type="text" placeholder="Type a message" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-light fa fa-redo-alt" id="refresh" type="button"></button>
+                        </div>
+                        <input type="text" placeholder="Escribe un mensaje" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
                         <div class="input-group-append">
+                            <button class="btn btn-light fa fa-folder" id="send" type="button"></button>
                             <button class="btn btn-light fa fa-paper-plane" id="send" type="button"></button>
                         </div>
                     </div>

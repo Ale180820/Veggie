@@ -18,7 +18,8 @@ namespace Veggie.Services {
         }
         public User searchUsers = new User();
         public User actualUser = new User();
-        public List<User> contacts = new List<User>();
+        public Entry actualConversation = new Entry();
+        public List<Contacts> contacts = new List<Contacts>();
         public List<Message> messages = new List<Message>();
         public List<Conversation> conversations = new List<Conversation>();
         public int idUser;

@@ -35,16 +35,44 @@ namespace Veggie.Controllers {
             if (response.IsSuccessStatusCode) {
                 var resultUser = response.Content.ReadAsStringAsync().Result;
                 var searchUser = JsonSerializer.Deserialize<User>(resultUser);
+                Storage.Instance.searchUsers = searchUser;
                 var starCon = new Entry {
                     actualUser = Storage.Instance.idUser.ToString(),
                     sendUser = Storage.Instance.searchUsers.username
                 };
-                var json2 = Newtonsoft.Json.JsonConvert.SerializeObject(starCon);
-                var user2 = new StringContent(json2.ToString(), Encoding.UTF8, "application/json");
-                var response2 = APIConnection.WebApliClient.PostAsync("api/createConversation", user2).Result;
-                if (response2.IsSuccessStatusCode) {
-                    Storage.Instance.contacts.Add(searchUser);
+
+                var jsonU = Newtonsoft.Json.JsonConvert.SerializeObject(starCon);
+                var userU = new StringContent(jsonU.ToString(), Encoding.UTF8, "application/json");
+                var responseU = APIConnection.WebApliClient.PostAsync("api/findConversationByUsers", userU).Result;
+
+                if (responseU.IsSuccessStatusCode) {
+                    var resultConversation = responseU.Content.ReadAsStringAsync().Result;
+
+                    if (resultConversation != "false") {
+                        var json2 = Newtonsoft.Json.JsonConvert.SerializeObject(starCon);
+                        var user2 = new StringContent(json2.ToString(), Encoding.UTF8, "application/json");
+                        var response2 = APIConnection.WebApliClient.PostAsync("api/createConversation", user2).Result;
+                        var newUser = new Contacts {
+                            username = searchUser.username,
+                            email = searchUser.emailUser
+                        };
+                        if (response2.IsSuccessStatusCode) {
+                            Storage.Instance.contacts.Add(newUser);
+                        }
+                    }
+                    else
+                    {
+                        //ADD ERROR MESSAGE (Ya existe una conversacion)
+                    }
                 }
+                else
+                {
+                    //ADD ERROR MESSAGE (Ya existe una conversacion)
+                }
+            }
+            else
+            {
+                //ADD ERROR MESSAGE (No existe el usuario que se desea conectar)
             }
             return RedirectToAction("Index", "Chat");
         }
@@ -75,20 +103,27 @@ namespace Veggie.Controllers {
 
         }
 
+        //Refresh chat 
+        public ActionResult refresh(string id) {
+            return RedirectToAction("Index", "Chat");
+        }
 
         //Method for get (if exist) message
-        public ActionResult getMessages(string idUsername) {
+        public ActionResult getMessages(string usernameS) {
             var userLogin = new Entry { 
-                actualUser = idUsername,
-                sendUser = Storage.Instance.searchUsers.username
+                actualUser = Storage.Instance.idUser.ToString(),
+                sendUser = usernameS
             };
+            Storage.Instance.actualConversation = userLogin;
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
             var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            var response = APIConnection.WebApliClient.PostAsync("api/createConversation", user).Result;
+            var response = APIConnection.WebApliClient.PostAsync("api/findConversationByUsers", user).Result;
             if (response.IsSuccessStatusCode) {
                 var result = response.Content.ReadAsStringAsync().Result;
-                var search = JsonSerializer.Deserialize <List<Message>>(result);
-                Storage.Instance.messages = search;
+                if (result != "false") {
+                    var search = JsonSerializer.Deserialize<List<Message>>(result);
+                    Storage.Instance.messages = search;
+                }
             }
             return RedirectToAction("Index", "Chat");
         }  
