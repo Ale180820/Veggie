@@ -16,7 +16,20 @@ namespace VeggieAPI.Controllers {
             return Ok();
         }
 
-        #region User methods
+        #region Methods for user processes
+        [HttpPost("createUser")]
+        public ActionResult createUser([FromBody] User user) {
+            if (user.nameUser != null) {
+                if (createNewUser(user)) {
+                    return Ok();
+                } else {
+                    return StatusCode(500, "InternalServerError");
+                }
+            } else {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
         [HttpPost("findUserByUsername")]
         public ActionResult findUser([FromBody] string username) {
             User newUser = new User();
@@ -52,19 +65,55 @@ namespace VeggieAPI.Controllers {
             return Ok(newUser);
         }
 
-        [HttpPost("createUser")]
-        public ActionResult createUser([FromBody] User user) {
-            if (user.nameUser != null) {
-                if (createNewUser(user)) {
-                    return Ok();
-                } else {
-                    return StatusCode(500, "InternalServerError");
-                }
-            } else {
-                return StatusCode(500, "InternalServerError");
+        #region [User] Methods for communication with the database
+        public bool createNewUser(User user) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                Models.MongoHelper.users_collection.InsertOneAsync(user);
+                return true;
+            } catch {
+                return false;
             }
         }
 
+        public User findUserById(int idUser) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("_id", idUser)).FirstOrDefault(); ;
+            } catch {
+                return null;
+            }
+        }
+
+        public User findUserDataBaseByUsername(string username) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
+            } catch {
+                return null;
+            }
+        }
+
+        public User findUserDataBaseByEmail(string email) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                return result;
+            } catch {
+                return null;
+            }
+        }
+        #endregion
+
+
+        #endregion
+
+        #region Methods for login processes
         [HttpPost("login")]
         public ActionResult login([FromBody] User user) {
             if (user.emailUser != null) {
@@ -75,6 +124,68 @@ namespace VeggieAPI.Controllers {
                 }
             } else {
                 return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        #region Internal process
+        public bool loginUser(User user) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
+                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
+                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
+                if (result == null) {
+                    return false;
+                }
+                if (user.password.Equals(result.password)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch {
+                return false;
+            }
+        }
+        #endregion
+        #endregion
+
+        [HttpPost("createConversation")]
+        public ActionResult createConversation([FromBody] Entry userConversation) {
+            try {
+                Conversation newConversation = new Conversation();
+                DiffieHellman df = new DiffieHellman();
+                df.GenerateKeys(104);
+                newConversation.userOne = findUserById(int.Parse(userConversation.actualUser));
+                newConversation.userTwo = findUserDataBaseByUsername(userConversation.sendUser);
+                newConversation.firstKey = df.getPublicOne();
+                newConversation.secondKey = df.getPublicTwo();
+                newConversation.messages = new List<Message>();
+                if (createNewConversation(newConversation)) {
+                    return Ok();
+                } else {
+                    return StatusCode(500, "InternalServerError");
+                }
+            } catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        [HttpPost("getConversationByUserId")]
+        public ActionResult getConversationByUserId(string idUser){
+            List<Conversation> conversationsReturn = new List<Conversation>();
+            List<Conversation> firstResult = getConversationByUser(int.Parse(idUser), true);
+            List<Conversation> secondResult = getConversationByUser(int.Parse(idUser), false);
+            if (secondResult.Count != 0 && firstResult.Count != 0) {
+                foreach (Conversation item in firstResult){
+                    conversationsReturn.Add(item);
+                }
+
+                foreach (Conversation item in secondResult){
+                    conversationsReturn.Add(item);
+                }
+                return Ok(conversationsReturn);
+            }else {
+                return Ok(conversationsReturn);
             }
         }
 
@@ -91,7 +202,22 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #endregion
+        [HttpPost("getMessagesConversation")]
+        public ActionResult getConversation([FromBody] Entry userConversation){
+            try{
+                var firstUser = findUserById(int.Parse(userConversation.actualUser)).username;
+                var secondUser = findUserDataBaseByUsername(userConversation.sendUser).username;
+                List<Message> messages = getConversationMessages(firstUser, secondUser);
+                if (messages.Count > 0){
+                    return Ok(messages);
+                }else{
+                    return StatusCode(500, "InternalServerError");
+                }
+            }catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }  
+
         [HttpPost("findConversationByUsers")]
         public ActionResult findConversation([FromBody] Entry userConversation) {
             try {
@@ -108,92 +234,6 @@ namespace VeggieAPI.Controllers {
                 return StatusCode(500, "InternalServerError");
             }
         }
-
-        [HttpPost("createConversation")]
-        public ActionResult createConversation([FromBody] Entry userConversation) {
-            try {
-                Conversation newConversation = new Conversation();
-                DiffieHellman df = new DiffieHellman();
-                df.GenerateKeys(104);
-                newConversation.userOne = findUserById(int.Parse(userConversation.actualUser));
-                newConversation.userTwo = findUserDataBaseByUsername(userConversation.sendUser);
-                newConversation.firstKey = df.getPublicOne();
-                newConversation.secondKey = df.getPublicTwo();
-                newConversation.messages = new List<Message>();
-                if (createNewConversation(newConversation)) {
-                    return Ok();
-                }else {
-                    return StatusCode(500, "InternalServerError");
-                }
-            }catch {
-                return StatusCode(500, "InternalServerError");
-            }
-        }
-
-        #region User back methods
-        public bool createNewUser(User user) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                Models.MongoHelper.users_collection.InsertOneAsync(user);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
-        public User findUserById(int idUser){
-            try{
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("_id", idUser)).FirstOrDefault(); ;
-            }catch { 
-                return null;
-            }
-        }
-
-        public User findUserDataBaseByUsername(string username){
-            try{
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                return Models.MongoHelper.users_collection.Find(Builders<VeggieBack.Models.User>.Filter.Eq("username", username)).FirstOrDefault();
-            }catch{
-                return null;
-            }
-        }
-
-        public User findUserDataBaseByEmail(string email){
-            try{
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", email);
-                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
-                return result;
-            }
-            catch{
-                return null;
-            }
-        }
-
-        public bool loginUser(User user){
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.users_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.User>("user");
-                var filter = Builders<VeggieBack.Models.User>.Filter.Eq("emailUser", user.emailUser);
-                var result = Models.MongoHelper.users_collection.Find(filter).FirstOrDefault();
-                if (result == null){
-                    return false;
-                }
-                if (user.password.Equals(result.password)){
-                    return true;
-                } else{
-                    return false;
-                }
-            } catch{
-                return false;
-            }
-        }
-        #endregion
 
         public bool createNewConversation(Conversation conversation) {
             try {
@@ -235,6 +275,46 @@ namespace VeggieAPI.Controllers {
             catch {
                 return null;
             }
+        }
+
+        public List<Message> getConversationMessages(string userOne, string userTwo) {
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userOne.username", userOne);
+                var filterTwo = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userTwo.username", userTwo);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                var resultTwo = Models.MongoHelper.conversations_collection.Find(filterTwo).FirstOrDefault();
+                if (resultTwo != null && result != null){
+                    List<Message> messages = result.messages;
+                    return messages;
+                }else{
+                    return null;
+                }
+            }catch{
+                return null;
+            }
+        }
+
+        public List<Conversation> getConversationByUser(int idUser, bool status){
+            try {
+                string typeFilter = string.Empty;
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                if (status){
+                    typeFilter = "userOne._id";
+                }else {
+                    typeFilter = "userTwo._id";
+                      
+                }
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq(typeFilter, idUser);
+                var result = Models.MongoHelper.conversations_collection.Find(filter);
+                return (List<Conversation>) result;
+            }
+            catch {
+                return null;
+            }
+            return null;
         }
 
         public bool findConversation(string userOne, string userTwo){
