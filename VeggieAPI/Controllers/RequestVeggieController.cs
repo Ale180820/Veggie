@@ -61,8 +61,14 @@ namespace VeggieAPI.Controllers {
         [HttpPost("findUserByEmail")]
         public ActionResult findUserByEmail([FromBody] User email) {
             User newUser = new User();
-            newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
-            return Ok(newUser);
+            if(findUserDataBaseByEmail(email.emailUser) != null){
+                newUser._id = findUserDataBaseByEmail(email.emailUser)._id;
+                return Ok(newUser);
+            }else {
+                return StatusCode(500, "InternalServerError");
+            }
+            
+            
         }
 
         #region [User] Methods for communication with the database
