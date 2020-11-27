@@ -8,7 +8,7 @@ namespace VeggieBack.Models {
         public Message messageSend { get; set; }
         public int idConversation { get; set; }
         public bool typeMessage { get; set; }
-        File fileSend { get; set; }
+        public File fileSend { get; set; }
 
     }
 }
