@@ -110,15 +110,14 @@ namespace Veggie.Controllers {
         //}
 
         [HttpPost]
-        public ActionResult sendM(IFormFile file)
-        {
-            try
-            {
+        public ActionResult sendM(IFormFile file) {
+            try {
                 DateTime now = DateTime.Now;
                 var messageFile = new Message {
                     receivingUser = Storage.Instance.actualConversation.sendUser,
                     sendingUser = Storage.Instance.idUser.ToString(),
                     message = "",
+                    typeMessage = false,
                     messageTime = now,
                 };
                 var fileInfo = new File {
@@ -153,14 +152,15 @@ namespace Veggie.Controllers {
         public ActionResult SendMessage(string message) {
             try {
                 DateTime now = DateTime.Now;
-                var userLogin = new Message {
+                var messageText = new Message {
                     receivingUser = Storage.Instance.actualConversation.sendUser,
                     sendingUser = Storage.Instance.idUser.ToString(),
                     message = message,
                     messageTime = now,
+                    typeMessage = true
                 };
                 var messageSend = new SendMessage {
-                    messageSend = userLogin,
+                    messageSend = messageText,
                     idConversation = Storage.Instance.conversationId,
                     typeMessage = true
                 };
@@ -198,12 +198,12 @@ namespace Veggie.Controllers {
         public ActionResult searchMessage(string searchMessage) {
             try {
                 FindMessage findMessage = new FindMessage {
-                    idConversation = Storage.Instance.idUser,
+                    idConversation = Storage.Instance.conversationId,
                     message = searchMessage
                 };
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(findMessage);
                 var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-                var response = APIConnection.WebApliClient.PostAsync("api/searchMessage", messageS).Result;
+                var response = APIConnection.WebApliClient.PostAsync("api/getSpecificMessage", messageS).Result;
                 if (response.IsSuccessStatusCode) {
                     var result = response.Content.ReadAsStringAsync().Result;
                     var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);

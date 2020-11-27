@@ -228,10 +228,24 @@ namespace VeggieAPI.Controllers {
         [HttpPost("getAllMessage")]
         public ActionResult getAllMessagesConversation([FromBody] int idConversation) {
             try {
-                List<Message> messageSends = new List<Message>();
-                messageSends = findConversationById(idConversation);
-                messageSends = decryptionMessages(messageSends, idConversation);
-                return Ok(messageSends);
+                List<SendMessage> listSendMessage = new List<SendMessage>();
+                var conversation = findConversationByIdConversation(idConversation);
+                foreach (Message message in conversation.messages) {
+                    if (message.typeMessage){
+                        SendMessage newSendMessage = new SendMessage();
+                        newSendMessage.messageSend = decryptionMessage(message, idConversation);
+                        newSendMessage.idConversation = idConversation;
+                        newSendMessage.typeMessage = true;
+                        listSendMessage.Add(newSendMessage);
+                    }else {
+                        SendMessage newSendMessage = new SendMessage();
+                        newSendMessage.fileSend = message.file;
+                        newSendMessage.idConversation = idConversation;
+                        newSendMessage.typeMessage = false;
+                        listSendMessage.Add(newSendMessage);
+                    }
+                }
+                return Ok(listSendMessage);
             } catch{
                 return StatusCode(500, "InternalServerError");
             }
@@ -312,6 +326,18 @@ namespace VeggieAPI.Controllers {
             }
         }
 
+        public Conversation findConversationByIdConversation(int idConversation) {
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                return result;
+            }catch{
+                return null;
+            }
+        }
+
         public List<Message> getConversationMessages(string userOne, string userTwo) {
             try{
                 Models.MongoHelper.ConnectToMongoService();
@@ -382,6 +408,22 @@ namespace VeggieAPI.Controllers {
                 decryptMessage.Add(message);
             }
             return decryptMessage;
+        }
+
+        public Message decryptionMessage(Message message, int idConversation) {
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
+                DiffieHellman df = new DiffieHellman();
+                message.message = encryption.CifradoDecifrado(message.message, false, df.getPrivateKey(conversation.firstKey, conversation.secondKey));
+                return message;
+            }catch{
+                return null;
+            }
+
         }
 
         #region Send file methods
