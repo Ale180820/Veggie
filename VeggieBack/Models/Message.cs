@@ -13,7 +13,6 @@ namespace VeggieBack.Models {
         public string receivingUser { get; set; }
         public string message { get; set; }
         public DateTime messageTime { get; set; }
-        public bool typeMessage { get; set; } //True texto, false es file. 
 
         public Message() {
             var rand = new Random();

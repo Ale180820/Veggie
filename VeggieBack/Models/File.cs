@@ -6,6 +6,7 @@ namespace VeggieBack.Models {
         public static int codeFile = 0;
         public int _id { get; set; }
         public string fileName { get; set; }
+        public String FileCompressName { get; set; }
         public string compressedFilePath { get; set; }
 
         public File() {
