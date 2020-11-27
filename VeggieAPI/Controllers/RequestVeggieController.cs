@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Mime;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 
@@ -9,6 +13,8 @@ namespace VeggieAPI.Controllers {
     [Route("api/")]
     [ApiController]
     public class RequestVeggieController : ControllerBase {
+
+        private static string routeDirectory = Environment.CurrentDirectory;
 
         [HttpGet("home")]
         public ActionResult Get() {
@@ -377,6 +383,58 @@ namespace VeggieAPI.Controllers {
             }
             return decryptMessage;
         }
+
+        #region Send file methods
+        /// <summary>
+        /// Method to get the file sent
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns>Return the decompressed file</returns>
+        [HttpPost("decompress")]
+        public ActionResult Decompress([FromForm] IFormFile file)
+        {
+            if (file != null)
+            {
+                LZWCompressor fileController = new LZWCompressor();
+                string path = fileController.DecompressFile(file, routeDirectory);
+                return ReturnTextFile(file);
+            }else{
+                return StatusCode(500, "InternalServerError");
+            }
+
+        }
+
+        [HttpPost("compress")]
+        public ActionResult Compress([FromForm] IFormFile file){
+            if (file.Length != 0 && file != null){
+                LZWCompressor fileController = new LZWCompressor();
+                fileController.CompressFile(file, routeDirectory);
+                return ReturnLZWFile(file);
+            }else{
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+
+        /// <summary>
+        /// Method to build the returnable file
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns></returns>
+        public ActionResult ReturnLZWFile([FromForm] IFormFile file){
+            return PhysicalFile(Path.Combine(routeDirectory, "compress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.lzw"), MediaTypeNames.Text.Plain, $"{Path.GetFileNameWithoutExtension(file.FileName)}.lzw");
+        }
+
+        /// <summary>
+        /// Method to build the returnable file
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns></returns>
+        public ActionResult ReturnTextFile([FromForm] IFormFile file){
+            return PhysicalFile(Path.Combine(routeDirectory, "decompress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt"), MediaTypeNames.Text.Plain, $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt");
+        }
+        #endregion
+
     }
 }
 

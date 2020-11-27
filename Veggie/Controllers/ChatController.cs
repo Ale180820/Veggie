@@ -95,6 +95,17 @@ namespace Veggie.Controllers {
         }
         #endregion
 
+        [HttpPost]
+        public ActionResult sendM(IFormFile file)
+        {
+            return RedirectToAction("Index", "Chat");
+        }
+
+        //public FileResult file(string path)
+        //{
+
+        //}
+
         //Method for send message to others people
         public ActionResult SendMessage(string message) {
             DateTime now = DateTime.Now;
@@ -103,7 +114,6 @@ namespace Veggie.Controllers {
                 sendingUser = Storage.Instance.idUser.ToString(),
                 message = message,
                 messageTime = now,
-                typeMessage = true
             };
             var messageSend = new SendMessage {
                 messageSend = userLogin,
