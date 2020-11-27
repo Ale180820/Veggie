@@ -176,7 +176,6 @@ namespace VeggieAPI.Controllers {
                 foreach (Conversation item in firstResult){
                     conversationsReturn.Add(item);
                 }
-
                 foreach (Conversation item in secondResult){
                     conversationsReturn.Add(item);
                 }
@@ -198,6 +197,8 @@ namespace VeggieAPI.Controllers {
                 return StatusCode(500, "InternalServerError");
             }
         }
+
+        
 
         [HttpPost("getMessagesConversation")]
         public ActionResult getConversation([FromBody] Entry userConversation){
@@ -311,7 +312,6 @@ namespace VeggieAPI.Controllers {
             catch {
                 return null;
             }
-            return null;
         }
 
         public bool findConversation(string userOne, string userTwo){
