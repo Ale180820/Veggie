@@ -1,16 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace VeggieBack.Models {
     public class Message {
 
-        public int messageId { get; set; }
-        public UserMessage sendingUser { get; set; }
-        public UserMessage receivingUser { get; set; }
-        public DateTime messageInformation { get; set; }
-        public byte statusMessage { get; set; }
+        /// <summary>
+        /// Method that will call the interface method
+        /// </summary>
 
-        public Message() { }
+        public static int codeMessage = 0;
+        public int _id { get; set; }
+        public string sendingUser { get; set; }
+        public string receivingUser { get; set; }
+        public string message { get; set; }
+        public DateTime messageTime { get; set; }
+        public bool typeMessage { get; set; } //True texto, false es file. 
+
+        public Message() {
+            var rand = new Random();
+            codeMessage = codeMessage + 100 + rand.Next(0, 100000);
+            this._id = codeMessage;
+        }
+
     }
 }

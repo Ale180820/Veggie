@@ -2,39 +2,62 @@
     ViewData["Title"] = "Login | Veggie";
 }
 
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 25px; left: 680px;" role="alert">
+            <strong>¡Error! </strong> @ViewBag.Message
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+        <div class="container">
+            <div class="card login-card">
+                <div class="row no-gutters">
+                    <div class="col-md-5">
+                        <img src="~/assets/img/image_one.jpg" alt="login" class="login-card-img">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <div class="brand-wrapper">
+                                <img src="~/assets/img/Logo.png" alt="logo" class="logo">
+                            </div>
 
-<main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
-    <div class="container">
-        <div class="card login-card">
-            <div class="row no-gutters">
-                <div class="col-md-5">
-                    <img src="~/assets/img/image_one.jpg" alt="login" class="login-card-img">
-                </div>
-                <div class="col-md-7">
-                    <div class="card-body">
-                        <div class="brand-wrapper">
-                            <img src="~/assets/img/Logo.png" alt="logo" class="logo">
+                            <form action="#!">
+                                <div class="form-group">
+                                    <label for="email" class="sr-only">Email</label>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="password" class="sr-only">Password</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="**********">
+                                </div>
+                                <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Ingresar">
+                                @*<script type="text/javascript">
+                                        $('#login').click(function () {
+                                            var emailx = $("#email").val();
+                                            $.get("/Home/GetID", { email: emailx }, function (data) {
+                                                localStorage.setItem("idUser", data);
+                                            });
+                                        }
+                                        );
+                                    </script>*@
+                            </form>
+                            <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
+                            <nav class="login-card-footer-nav">
+                                <a href="#!">Terms of use.</a>
+                                <a href="#!">Privacy policy</a>
+                            </nav>
                         </div>
-                        @*<p class="login-card-description">Ingresa con tus datos</p>*@
-                        <form action="#!">
-                            <div class="form-group">
-                                <label for="email" class="sr-only">Email</label>
-                                <input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="password" class="sr-only">Password</label>
-                                <input type="password" name="password" id="password" class="form-control" placeholder="**********">
-                            </div>
-                            <input name="login" id="login" class="btn btn-block login-btn mb-4" type="button" value="Ingresar">
-                        </form>
-                        <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
-                        <nav class="login-card-footer-nav">
-                            <a href="#!">Terms of use.</a>
-                            <a href="#!">Privacy policy</a>
-                        </nav>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
+}
+

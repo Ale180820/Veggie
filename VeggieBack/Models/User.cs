@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace VeggieBack.Models {
     public class User {
 
         public static int codeUser = 0;
-        public int userId { get; set; }
+        public int _id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
         public string nameUser { get; set; }
@@ -14,14 +12,12 @@ namespace VeggieBack.Models {
         public string statusUser { get; set; }
         public string emailUser { get; set; }
 
-        public User() { }
-
-        public int generateId() {
-            codeUser++;
-            return codeUser;
+        public User() {
+            var rand = new Random();
+            codeUser = codeUser + 100 + rand.Next(0, 100000);
+            this._id = codeUser;
         }
-
-
+       
 
     }
 }
