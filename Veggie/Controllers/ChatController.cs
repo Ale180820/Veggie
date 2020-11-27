@@ -156,6 +156,7 @@ namespace Veggie.Controllers {
                 actualUser = Storage.Instance.idUser.ToString(),
                 sendUser = usernameS
             };
+            fillConversations();
             Storage.Instance.conversationId = findConversationId(usernameS);
             Storage.Instance.actualConversation = userLogin;
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(Storage.Instance.conversationId);
@@ -196,5 +197,21 @@ namespace Veggie.Controllers {
                 return find;
             }
         }
+
+
+        public bool fillConversations() {
+            var userConver = Storage.Instance.idUser;
+            var jsonU = Newtonsoft.Json.JsonConvert.SerializeObject(userConver);
+            var userU = new StringContent(jsonU.ToString(), Encoding.UTF8, "application/json");
+            var responseU = APIConnection.WebApliClient.PostAsync("api/getConversationByUserId", userU).Result;
+            if (responseU.IsSuccessStatusCode) {
+                var resultUser = responseU.Content.ReadAsStringAsync().Result;
+                var contactsU = JsonSerializer.Deserialize<List<Conversation>>(resultUser);
+                Storage.Instance.conversations = contactsU;
+                return true;
+            }
+            return false;
+        }
+
     }
 }
