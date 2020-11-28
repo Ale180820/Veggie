@@ -310,7 +310,6 @@ namespace VeggieAPI.Controllers {
                     } else {
                         return StatusCode(500, "InternalServerError");
                     }
-
                 }else{
                     try {
                         string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
@@ -370,6 +369,31 @@ namespace VeggieAPI.Controllers {
             catch {
                 return StatusCode(500, "InternalServerError");
             }
+        }
+
+
+        [HttpPost("downloadM")]
+        public ActionResult downloadFile([FromBody] int fileId) {
+
+            //Agregar valores provenientes de la base de datos
+            string compressionPath = "";
+            string filename = "";
+
+            FileStream newfileStream = new FileStream(compressionPath, FileMode.OpenOrCreate);
+            var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), compressionPath) {
+                Headers = new HeaderDictionary()
+            };
+
+            LZWCompressor decompressor = new LZWCompressor();
+            var pathDecompressor = decompressor.Decompress(formFile, routeDirectory); 
+            byte[] newBytes = System.IO.File.ReadAllBytes(pathDecompressor);
+            DownloadFile downloadFile = new DownloadFile{
+                file = newBytes,
+                fileName = filename
+            };
+
+            return Ok(downloadFile);
+            
         }
 
         [HttpPost("getSpecificMessage")]
