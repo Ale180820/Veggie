@@ -312,7 +312,13 @@ namespace VeggieAPI.Controllers {
                         compressor.Compress(formFile, routeDirectory);
                         message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
                         message.fileSend.fileName = formFile.FileName;
-                        return Ok();
+                        if(insertFileInConversation(message))
+                        {
+                            return Ok();
+                        }else {
+                            return StatusCode(500, "InternalServerError");
+                        }
+
                     }catch {
                         return StatusCode(500, "InternalServerError");
                     }
