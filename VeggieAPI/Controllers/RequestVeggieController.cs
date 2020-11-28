@@ -284,43 +284,26 @@ namespace VeggieAPI.Controllers {
         }
 
         [HttpPost("sendMessage")]
-        public ActionResult sendMessage([FromBody] SendMessage message) {
-            try {
-<<<<<<< HEAD
-=======
+        public ActionResult sendMessage([FromBody] SendMessage message)
+        {
+            try
+            {
 
->>>>>>> 28688cd0d862833f20ae52b6419bf5d8529e1a48
-                if (message.typeMessage) {
-                    if (sendMessageInConversation(message)){
+                if (message.typeMessage)
+                {
+                    if (sendMessageInConversation(message))
+                    {
                         return Ok();
-                    } else {
+                    }
+                    else
+                    {
                         return StatusCode(500, "InternalServerError");
                     }
-<<<<<<< HEAD
                 }
-                else {
-                    string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
-                    FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
-                    BinaryWriter binaryWriter = new BinaryWriter(fileStream);
-
-                    binaryWriter.Write(message.fileSend.file);
-                    binaryWriter.Close();
-                    fileStream.Close();
-
-                    FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
-                    var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
-                            Headers = new HeaderDictionary()
-                    };
-
-                    LZWCompressor compressor = new LZWCompressor();
-                    compressor.Compress(formFile, routeDirectory);
-                    message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
-                    message.fileSend.fileName = formFile.FileName;
-                    return Ok();
-
-=======
-                }else{
-                    try {
+                else
+                {
+                    try
+                    {
                         string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
                         FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
                         BinaryWriter binaryWriter = new BinaryWriter(fileStream);
@@ -330,7 +313,8 @@ namespace VeggieAPI.Controllers {
                         fileStream.Close();
 
                         FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
-                        var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
+                        var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName)
+                        {
                             Headers = new HeaderDictionary()
                         };
 
@@ -338,29 +322,38 @@ namespace VeggieAPI.Controllers {
                         compressor.Compress(formFile, routeDirectory);
                         message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
                         message.fileSend.fileName = formFile.FileName;
-                        if(insertFileInConversation(message))
+                        if (sendMessageFile(message))
                         {
                             return Ok();
-                        }else {
+                        }
+                        else
+                        {
                             return StatusCode(500, "InternalServerError");
                         }
 
-                    }catch {
+                    }
+                    catch
+                    {
                         return StatusCode(500, "InternalServerError");
                     }
->>>>>>> 28688cd0d862833f20ae52b6419bf5d8529e1a48
                 }
-            } catch {
+            }
+            catch
+            {
                 return StatusCode(500, "InternalServerError");
             }
         }
 
-        public bool insertFileInConversation(SendMessage message) {
+
+            public bool insertFileInConversation(SendMessage message) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
                 var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
                 var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                if (conversation.path == null) {
+                    conversation.path = new List<VeggieBack.Models.File>();
+                }
                 conversation.path.Add(message.fileSend);
                 return true;
             } catch {
@@ -495,6 +488,9 @@ namespace VeggieAPI.Controllers {
                 Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
                 var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
                 var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                if (conversation.path == null) {
+                    conversation.path = new List<VeggieBack.Models.File>();
+                }
                 conversation.path.Add(message.fileSend);
                 var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", conversation.messages);
                 var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);

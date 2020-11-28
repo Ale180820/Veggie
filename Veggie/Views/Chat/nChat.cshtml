@@ -3,15 +3,6 @@
     ViewData["Title"] = "Chat | Veggie";
 }
 
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 10px; left: 680px;" role="alert">
-        <strong>¡Error! </strong> @ViewBag.Message
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
 @if (ViewBag.Search != null)
 {
     <div class="alert alert-secondary alert-dismissible fade show" style="position: relative; top: 10px; left: 10px;" role="alert">

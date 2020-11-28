@@ -17,10 +17,7 @@ namespace Veggie.Controllers {
 
         // GET: ChatController
         public ActionResult Index() {
-            if (TempData["smsFail"] != null) {
-                ViewBag.Message = "Ha ocurrido un error en la ejecución, intentelo nuevamente.";
-            }
-
+            
             if (TempData["search"] != null) {
                 ViewBag.Message = "Encontrado";
                 ViewBag.Search = "Encontrado";
