@@ -200,15 +200,6 @@ namespace VeggieAPI.Controllers {
         [HttpPost("sendMessage")]
         public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
-                string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
-                FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
-                BinaryWriter binaryWriter = new BinaryWriter(fileStream);
-
-                binaryWriter.Write(message.fileSend.file);
-                binaryWriter.Close();
-                fileStream.Close();
-                
-
                 if (message.typeMessage) {
                     if (sendMessageInConversation(message))
                     {
@@ -220,6 +211,14 @@ namespace VeggieAPI.Controllers {
                     }
                 }
                 else {
+                    string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
+                    FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                    BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+                    binaryWriter.Write(message.fileSend.file);
+                    binaryWriter.Close();
+                    fileStream.Close();
+
                     FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
                     var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
                             Headers = new HeaderDictionary()
