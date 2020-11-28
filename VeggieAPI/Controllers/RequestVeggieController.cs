@@ -322,8 +322,7 @@ namespace VeggieAPI.Controllers {
                         compressor.Compress(formFile, routeDirectory);
                         message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
                         message.fileSend.fileName = formFile.FileName;
-                        if (sendMessageFile(message))
-                        {
+                        if (sendMessageFile(message)) {
                             return Ok();
                         }
                         else
