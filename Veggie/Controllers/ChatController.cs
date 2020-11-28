@@ -17,8 +17,7 @@ namespace Veggie.Controllers {
             if (TempData["smsFail"] != null) {
                 ViewBag.Message = "Ha ocurrido un error en la ejecución, intentelo nuevamente.";
             }
-            if (TempData["search"] != null)
-            {
+            if (TempData["search"] != null) {
                 ViewBag.Message = "Encontrado";
             }
             return View("nChat");
@@ -120,7 +119,7 @@ namespace Veggie.Controllers {
                     typeMessage = false,
                     messageTime = now,
                 };
-                var fileInfo = new File {
+                var fileInfo = new File() {
                     file = file,
                     fileName = file.FileName,
                 };
