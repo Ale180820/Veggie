@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using Veggie.System;
+using Veggie.APISystem;
 using VeggieBack.Models;
 using Veggie.Services;
 using System.Text.Json;
 using System;
+using Microsoft.AspNetCore.Hosting;
+using Veggie.Models;
+using System.IO;
 
 namespace Veggie.Controllers {
     public class ChatController : Controller {
@@ -17,11 +20,15 @@ namespace Veggie.Controllers {
             if (TempData["smsFail"] != null) {
                 ViewBag.Message = "Ha ocurrido un error en la ejecución, intentelo nuevamente.";
             }
-            if (TempData["search"] != null)
+            if (TempData["Search"] != null)
             {
-                ViewBag.Message = "Encontrado";
+                ViewBag.Search = "Encontrado";
             }
             return View("nChat");
+        }
+        [HttpPost]
+        public ActionResult FindMessages() {
+            return View("FindMessages");
         }
 
         [HttpPost]
@@ -40,8 +47,7 @@ namespace Veggie.Controllers {
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(userLogin);
                 var user = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
                 var response = APIConnection.WebApliClient.PostAsync("api/findUserByUsernameExist", user).Result;
-                if (response.IsSuccessStatusCode)
-                {
+                if (response.IsSuccessStatusCode) {
                     var resultUser = response.Content.ReadAsStringAsync().Result;
                     var searchUser = JsonSerializer.Deserialize<User>(resultUser);
                     Storage.Instance.searchUsers = searchUser;
@@ -55,7 +61,6 @@ namespace Veggie.Controllers {
                     else {
                         return RedirectToAction("Index", "Chat");
                     }
-
                     return RedirectToAction("Index", "Chat");
                 }
                 else {
@@ -108,29 +113,54 @@ namespace Veggie.Controllers {
         //    var fileName = "something.bin";
         //    return File(content, contentType, fileName);
         //}
+        public Route route = new Route();
+        public ChatController(IWebHostEnvironment env)
+        {
+            route.hostEnvironment = env;
+        }
 
         [HttpPost]
         public ActionResult sendM(IFormFile file) {
             try {
+                if (string.IsNullOrWhiteSpace(route.webRoot())) {
+                    route.hostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Cloud");
+                }
+
+                if (!Directory.Exists(route.setCDirectory())) {
+                    Directory.CreateDirectory(route.setCDirectory());
+                }
+
+                var keysF = route.setRoute(file.FileName);
+                using var fileKeys = System.IO.File.Create(keysF);
+                file.CopyTo(fileKeys);
+                fileKeys.Flush();
+                fileKeys.Close();
+                byte[] bytes = System.IO.File.ReadAllBytes(route.getRoute(file.FileName));
+                
+
+
                 DateTime now = DateTime.Now;
-                var messageFile = new Message {
+                var messageFile = new Message
+                {
                     receivingUser = Storage.Instance.actualConversation.sendUser,
                     sendingUser = Storage.Instance.idUser.ToString(),
                     message = "",
                     typeMessage = false,
                     messageTime = now,
                 };
-                var fileInfo = new File {
-                    file = file,
+                var fileInfo = new VeggieBack.Models.File {
+                    file = bytes,
                     fileName = file.FileName,
                 };
 
-                fileInfo.assingName();
+                //fileInfo.assingName();
 
-                var messageSend = new SendMessage {
+                var messageSend = new SendMessage
+                {
+                    idConversation = Storage.Instance.conversationId,
                     messageSend = messageFile,
                     typeMessage = false,
-                    fileSend = fileInfo,
+                    fileSend = fileInfo
                 };
 
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(messageSend);
@@ -210,7 +240,7 @@ namespace Veggie.Controllers {
                     Storage.Instance.findMessages = sendMessage;
                 }
                 TempData["search"] = "...";
-                return RedirectToAction("Index", "Chat");
+                return RedirectToAction("FindMessages", "Chat");
             }
             catch (Exception) {
                 TempData["smsFail"] = "...";

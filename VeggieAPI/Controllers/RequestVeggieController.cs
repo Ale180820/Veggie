@@ -200,8 +200,16 @@ namespace VeggieAPI.Controllers {
         [HttpPost("sendMessage")]
         public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
-                if (message.typeMessage)
-                {
+                string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
+                FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+                binaryWriter.Write(message.fileSend.file);
+                binaryWriter.Close();
+                fileStream.Close();
+                
+
+                if (message.typeMessage) {
                     if (sendMessageInConversation(message))
                     {
                         return Ok();
@@ -210,6 +218,17 @@ namespace VeggieAPI.Controllers {
                     {
                         return StatusCode(500, "InternalServerError");
                     }
+                }
+                else
+                {
+                    FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                    var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
+                            Headers = new HeaderDictionary()
+                        };
+
+                    LZWCompressor compressor = new LZWCompressor();
+                    compressor.Compress(formFile, routeDirectory);
+                    message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
                 }
                 //Cambiar por lo del archivo
                 return StatusCode(500, "InternalServerError");
@@ -231,7 +250,8 @@ namespace VeggieAPI.Controllers {
             try{
                 var conversation = findConversationByIdConversation(find.idConversation);
                 foreach (Message message in conversation.messages){
-                    if (message.message.Contains(decryptionMessage(message, find.idConversation).message)){
+                    var mess = decryptionMessage(message, find.idConversation).message;
+                    if (mess.Contains(find.message)){
                         messages.Add(message);
                     }
                 }
@@ -240,6 +260,9 @@ namespace VeggieAPI.Controllers {
                 return Ok(messages);
             }
         }
+
+        
+
 
         [HttpPost("getAllMessage")]
         public ActionResult getAllMessagesConversation([FromBody] int idConversation) {

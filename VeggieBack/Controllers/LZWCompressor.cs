@@ -35,9 +35,7 @@ namespace VeggieBack.Controllers {
         /// </summary>
         /// <param name="file"> File sent (.txt) </param>
         /// <param name="routeDirectory"> Current directory path </param>
-        public void Compress(IFormFile file, string routeDirectory)
-        {
-
+        public void Compress(IFormFile file, string routeDirectory) {
             var bufferLenght = 1000;
             var dictionaryOfLetters = new Dictionary<string, string>();
             var bbfWriting = new List<byte>();
