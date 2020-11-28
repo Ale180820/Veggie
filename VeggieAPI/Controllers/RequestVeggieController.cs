@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Mime;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 
@@ -10,12 +14,13 @@ namespace VeggieAPI.Controllers {
     [ApiController]
     public class RequestVeggieController : ControllerBase {
 
+        private static string routeDirectory = Environment.CurrentDirectory;
+
         [HttpGet("home")]
         public ActionResult Get() {
             return Ok();
         }
 
-        #region Methods for user processes
         [HttpPost("createUser")]
         public ActionResult createUser([FromBody] User user) {
             if (user.nameUser != null) {
@@ -68,7 +73,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region [User] Methods for communication with the database
         public bool createNewUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -111,12 +115,7 @@ namespace VeggieAPI.Controllers {
                 return null;
             }
         }
-        #endregion
 
-
-        #endregion
-
-        #region Methods for login processes
         [HttpPost("login")]
         public ActionResult login([FromBody] User user) {
             if (user.emailUser != null) {
@@ -130,7 +129,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region Internal process
         public bool loginUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -149,11 +147,9 @@ namespace VeggieAPI.Controllers {
                 return false;
             }
         }
-        #endregion
-        #endregion
 
         [HttpPost("createConversation")]
-        public ActionResult createConversation([FromBody] Entry userConversation) {
+        public ActionResult createConversation([FromBody] Entry userConversation){
             try {
                 Conversation newConversation = new Conversation();
                 DiffieHellman df = new DiffieHellman();
@@ -173,43 +169,249 @@ namespace VeggieAPI.Controllers {
             }
         }
 
+        [HttpPost("findConversationByUsers")]
+        public ActionResult findConversation([FromBody] Entry userConversation){
+            try {
+                var firstUser = findUserById(int.Parse(userConversation.actualUser)).username;
+                var secondUser = findUserDataBaseByUsername(userConversation.sendUser).username;
+                if (findConversation(firstUser, secondUser)){
+                    return Ok(false);
+                }else if (findConversation(secondUser, firstUser)){
+                    return Ok(false);
+                }else{
+                    return Ok(true);
+                }
+            }catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
         [HttpPost("getConversationByUserId")]
-        public ActionResult getConversationByUserId([FromBody] int idUser) {
+        public ActionResult getConversationByUserId([FromBody] int idUser){
             List<Conversation> conversationsReturn = new List<Conversation>();
             List<Conversation> firstResult = getConversationByUser(idUser, true);
             List<Conversation> secondResult = getConversationByUser(idUser, false);
-            if (secondResult != null && firstResult != null) {
-                foreach (Conversation item in firstResult) {
+            if (secondResult != null && firstResult != null){
+                foreach (Conversation item in firstResult){
                     conversationsReturn.Add(item);
                 }
-                foreach (Conversation item in secondResult) {
+                foreach (Conversation item in secondResult){
                     conversationsReturn.Add(item);
                 }
                 return Ok(conversationsReturn);
-            } else {
+            }else {
                 return Ok(conversationsReturn);
             }
         }
 
-        [HttpPost("sendMessage")]
-        public ActionResult sendMessage([FromBody] SendMessage message) {
+        public List<Message> findConversationById(int idConversation){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                return result.messages;
+            }catch{
+                return null;
+            }
+        }
+
+        public Conversation findConversationByIdConversation(int idConversation){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                return result;
+            }catch {
+                return null;
+            }
+        }
+
+        public bool createNewConversation(Conversation conversation){
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                Models.MongoHelper.conversations_collection.InsertOneAsync(conversation);
+                return true;
+            }catch {
+                return false;
+            }
+        }
+
+        public List<Conversation> getConversationByUser(int idUser, bool status)
+        {
+            try
+            {
+                string typeFilter = string.Empty;
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                if (status)
+                {
+                    typeFilter = "userOne._id";
+                }
+                else
+                {
+                    typeFilter = "userTwo._id";
+
+                }
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq(typeFilter, idUser);
+                var list = Models.MongoHelper.conversations_collection.Find(filter).ToListAsync();
+                return list.Result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool findConversation(string userOne, string userTwo) {
             try {
-                if (sendMessageInConversation(message)) {
-                    return Ok();
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userOne.username", userOne);
+                var filterTwo = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userTwo.username", userTwo);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                var resultTwo = Models.MongoHelper.conversations_collection.Find(filterTwo).FirstOrDefault();
+                if (resultTwo != null && result != null) {
+                    return true;
                 } else {
-                    return StatusCode(500, "InternalServerError");
+                    return false;
                 }
             } catch {
+                return false;
+            }
+        }
+
+        [HttpPost("sendMessage")]
+        public ActionResult sendMessage([FromBody] SendMessage message)
+        {
+            try
+            {
+
+                if (message.typeMessage)
+                {
+                    if (sendMessageInConversation(message))
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(500, "InternalServerError");
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
+                        FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                        BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+                        binaryWriter.Write(message.fileSend.file);
+                        binaryWriter.Close();
+                        fileStream.Close();
+
+                        FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                        var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName)
+                        {
+                            Headers = new HeaderDictionary()
+                        };
+
+                        LZWCompressor compressor = new LZWCompressor();
+                        compressor.Compress(formFile, routeDirectory);
+                        message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
+                        message.fileSend.fileName = formFile.FileName;
+                        if (sendMessageFile(message)) {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return StatusCode(500, "InternalServerError");
+                        }
+
+                    }
+                    catch
+                    {
+                        return StatusCode(500, "InternalServerError");
+                    }
+                }
+            }
+            catch
+            {
                 return StatusCode(500, "InternalServerError");
             }
+        }
+
+
+            public bool insertFileInConversation(SendMessage message) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                if (conversation.path == null) {
+                    conversation.path = new List<VeggieBack.Models.File>();
+                }
+                conversation.path.Add(message.fileSend);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        [HttpPost("getFileByFileId")]
+        public ActionResult getFileByFileId(int fileId) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("path._id", fileId);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                foreach(VeggieBack.Models.File file in result.path) {
+                    if(file._id == fileId) {
+                        return Ok(file);
+                    }
+                }
+                return Ok();
+            }
+            catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+
+        [HttpPost("downloadM")]
+        public ActionResult downloadFile([FromBody] int fileId) {
+
+            //Agregar valores provenientes de la base de datos
+            string compressionPath = "";
+            string filename = "";
+
+            FileStream newfileStream = new FileStream(compressionPath, FileMode.OpenOrCreate);
+            var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), compressionPath) {
+                Headers = new HeaderDictionary()
+            };
+
+            LZWCompressor decompressor = new LZWCompressor();
+            var pathDecompressor = decompressor.Decompress(formFile, routeDirectory); 
+            byte[] newBytes = System.IO.File.ReadAllBytes(pathDecompressor);
+            DownloadFile downloadFile = new DownloadFile{
+                file = newBytes,
+                fileName = filename
+            };
+
+            return Ok(downloadFile);
+            
         }
 
         [HttpPost("getSpecificMessage")]
         public ActionResult getSpecificMessages([FromBody] FindMessage find){
             List<Message> messages = new List<Message>();
             try{
-                foreach (Message message in findConversationById(find.idConversation)){
-                    if (message.message.Equals(find.message)){
+                var conversation = findConversationByIdConversation(find.idConversation);
+                foreach (Message message in conversation.messages){
+                    var mess = decryptionMessage(message, find.idConversation).message;
+                    if (mess.Contains(find.message)){
                         messages.Add(message);
                     }
                 }
@@ -222,10 +424,24 @@ namespace VeggieAPI.Controllers {
         [HttpPost("getAllMessage")]
         public ActionResult getAllMessagesConversation([FromBody] int idConversation) {
             try {
-                List<Message> messageSends = new List<Message>();
-                messageSends = findConversationById(idConversation);
-                messageSends = decryptionMessages(messageSends, idConversation);
-                return Ok(messageSends);
+                List<SendMessage> listSendMessage = new List<SendMessage>();
+                var conversation = findConversationByIdConversation(idConversation);
+                foreach (Message message in conversation.messages) {
+                    if (message.typeMessage){
+                        SendMessage newSendMessage = new SendMessage();
+                        newSendMessage.messageSend = decryptionMessage(message, idConversation);
+                        newSendMessage.idConversation = idConversation;
+                        newSendMessage.typeMessage = true;
+                        listSendMessage.Add(newSendMessage);
+                    }else {
+                        SendMessage newSendMessage = new SendMessage();
+                        newSendMessage.fileSend = message.file;
+                        newSendMessage.idConversation = idConversation;
+                        newSendMessage.typeMessage = false;
+                        listSendMessage.Add(newSendMessage);
+                    }
+                }
+                return Ok(listSendMessage);
             } catch{
                 return StatusCode(500, "InternalServerError");
             }
@@ -245,36 +461,8 @@ namespace VeggieAPI.Controllers {
             }catch {
                 return StatusCode(500, "InternalServerError");
             }
-        }  
-
-        [HttpPost("findConversationByUsers")]
-        public ActionResult findConversation([FromBody] Entry userConversation) {
-            try {
-                var firstUser = findUserById(int.Parse(userConversation.actualUser)).username;
-                var secondUser = findUserDataBaseByUsername(userConversation.sendUser).username;
-                if (findConversation(firstUser, secondUser)){
-                    return Ok(false);
-                }else if (findConversation(secondUser, firstUser)){
-                    return Ok(false);
-                }else {
-                    return Ok(true);
-                }
-            }catch {
-                return StatusCode(500, "InternalServerError");
-            }
         }
 
-        public bool createNewConversation(Conversation conversation) {
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
-                Models.MongoHelper.conversations_collection.InsertOneAsync(conversation);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-        
         public bool sendMessageInConversation(SendMessage message) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -293,16 +481,22 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        public List<Message> findConversationById(int idConversation){
+        public bool sendMessageFile(SendMessage message) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
                 Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
-                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
-                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
-                return result.messages;
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                if (conversation.path == null) {
+                    conversation.path = new List<VeggieBack.Models.File>();
+                }
+                conversation.path.Add(message.fileSend);
+                var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", conversation.messages);
+                var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);
+                return true;
             }
             catch {
-                return null;
+                return false;
             }
         }
 
@@ -325,44 +519,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        public List<Conversation> getConversationByUser(int idUser, bool status){
-            try {
-                string typeFilter = string.Empty;
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
-                if (status){
-                    typeFilter = "userOne._id";
-                }else {
-                    typeFilter = "userTwo._id";
-                      
-                }
-                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq(typeFilter, idUser);
-                var list = Models.MongoHelper.conversations_collection.Find(filter).ToListAsync();
-                return list.Result;
-            }
-            catch {
-                return null;
-            }
-        }
-
-        public bool findConversation(string userOne, string userTwo){
-            try {
-                Models.MongoHelper.ConnectToMongoService();
-                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
-                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userOne.username", userOne);
-                var filterTwo = Builders<VeggieBack.Models.Conversation>.Filter.Eq("userTwo.username", userTwo);
-                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
-                var resultTwo = Models.MongoHelper.conversations_collection.Find(filterTwo).FirstOrDefault();
-                if (resultTwo != null && result != null) {
-                    return true;
-                }else {
-                    return false;
-                }
-            }catch {
-                return false;
-            }
-        }
-
         public List<Message> decryptionMessages(List<Message> messages, int idConversation){
             List<Message> decryptMessage = new List<Message>();
             Models.MongoHelper.ConnectToMongoService();
@@ -377,6 +533,70 @@ namespace VeggieAPI.Controllers {
             }
             return decryptMessage;
         }
+
+        
+        public Message decryptionMessage(Message message, int idConversation) {
+            try{
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                SDES encryption = new SDES(); //Objeto que ecriptará el mensaje.
+                DiffieHellman df = new DiffieHellman();
+                message.message = encryption.CifradoDecifrado(message.message, false, df.getPrivateKey(conversation.firstKey, conversation.secondKey));
+                return message;
+            }catch{
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// Method to get the file sent
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns>Return the decompressed file</returns>
+        [HttpPost("decompress")]
+        public ActionResult Decompress([FromForm] IFormFile file)
+        {
+            if (file != null)
+            {
+                LZWCompressor fileController = new LZWCompressor();
+                string path = fileController.DecompressFile(file, routeDirectory);
+                return ReturnTextFile(file);
+            }else{
+                return StatusCode(500, "InternalServerError");
+            }
+
+        }
+
+        [HttpPost("compress")]
+        public ActionResult Compress([FromForm] IFormFile file){
+            if (file.Length != 0 && file != null){
+                LZWCompressor fileController = new LZWCompressor();
+                fileController.CompressFile(file, routeDirectory);
+                return ReturnLZWFile(file);
+            }else{
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        /// <summary>
+        /// Method to build the returnable file
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns></returns>
+        public ActionResult ReturnLZWFile([FromForm] IFormFile file){
+            return PhysicalFile(Path.Combine(routeDirectory, "compress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.lzw"), MediaTypeNames.Text.Plain, $"{Path.GetFileNameWithoutExtension(file.FileName)}.lzw");
+        }
+
+        /// <summary>
+        /// Method to build the returnable file
+        /// </summary>
+        /// <param name="file">File sent</param>
+        /// <returns></returns>
+        public ActionResult ReturnTextFile([FromForm] IFormFile file){
+            return PhysicalFile(Path.Combine(routeDirectory, "decompress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt"), MediaTypeNames.Text.Plain, $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt");
+        }
     }
 }
-

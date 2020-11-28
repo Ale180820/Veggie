@@ -3,82 +3,50 @@
     ViewData["Title"] = "Chat | Veggie";
 }
 
-@using (Html.BeginForm("Index", "Chat", FormMethod.Post)) {
-    if (ViewBag.Message != null) {
-        <div class="alert alert-danger alert-dismissible fade show col-5" style="position: absolute; top: 10px; left: 680px;" role="alert">
-            <strong>¡Error! </strong> @ViewBag.Message
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    }
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <div class="container py-5 px-4" style="top: 200px;">
-        <div class="row rounded-lg overflow-hidden shadow">
-            <!-- Users box-->
-            <div class="col-5 px-0">
-                <div class="bg-white">
-                    <div class="bg-gray px-4 py-1 bg-light">
-                        <p class="h5 mb-0 py-1">Conversaciones</p>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Buscar contacto" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary fa fa-search" id="searchBar" type="button"></button>
+@if (ViewBag.Search != null)
+{
+    <div class="alert alert-secondary alert-dismissible fade show" style="position: relative; top: 10px; left: 10px;" role="alert">
+        @if (Veggie.Services.Storage.Instance.findMessages.Count != 0)
+        {
+            <div class="card-body">
+                @foreach (var item in Veggie.Services.Storage.Instance.findMessages) {
+                    <form>
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Enviado por: @item.receivingUser</label>
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Recibido por: @item.receivingUser</label>
+                            <div class="col-sm-10">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">@item.message</label>
                             </div>
-                            <script type="text/javascript">
-                                $('#searchBar').click(function () {
-                                    var username = $("#username").val();
-                                    $.get("/Chat/SearchUser", { username: username }, function (data) {
-                                        location.reload();
-                                    });
-                                }
-                                );
-                            </script>
                         </div>
-                    </div>
-                    <div class="messages-box">
-                        <div class="list-group rounded-0" id="user">
-                            @if (Veggie.Services.Storage.Instance.contacts.Count != 0) {
-                                foreach (var item in Veggie.Services.Storage.Instance.contacts) {
-                                    <a class="list-group-item list-group-item-success alert-success rounded-0" id="userCon">
-                                        <div class="media">
-                                            <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-                                            <div class="media-body ml-4">
-                                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                                    <h6 class="mb-0" onclick="location.href='@Url.Action("getMessages", new { usernameS = item.username })'">@item.username</h6>
-                                                </div>
-                                                <p class="font-italic mb-0 text-small">@item.email</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
+                    </form>
+                }
             </div>
-            <!-- Chat Box-->
-            <div class="col-7 px-0 py-0">
-                <div class="bg-gray px-4 py-1 bg-light">
-                    @if (Veggie.Services.Storage.Instance.actualConversation.sendUser != null)
-                    {
-                        <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.actualConversation.sendUser</p>
-                    }
-                    else
-                    {
-                        <p class="h5 mb-0 py-1">Seleccione una conversación</p>
-                    }
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Buscar mensaje" id="messageS" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        }
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<div class="container py-5 px-4">
+    <div class="row rounded-lg overflow-hidden shadow">
+        <!-- Users box-->
+        <div class="col-5 px-0">
+            <div class="bg-white">
+                <div class="bg-white px-4 py-1 bg-light">
+                    <p class="h5 mb-0 py-1">Conversaciones</p>
+                    <div class="input-group my-2 my-lg-0">
+                        <input type="text" class="form-control mr-sm-2" placeholder="Buscar contacto" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary fa fa-search" id="searchMessage" type="button"></button>
+                            <button class="btn btn-outline-secondary fa fa-search" id="searchBar" type="button"></button>
                         </div>
                         <script type="text/javascript">
-                            $('#searchMessage').click(function () {
-                                var messageSearch = $("#messageS").val();
-                                $.get("/Chat/searchMessage", { searchMessage: messageSearch }, function (data) {
+                            $('#searchBar').click(function () {
+                                var username = $("#username").val();
+                                $.get("/Chat/SearchUser", { username: username }, function (data) {
                                     location.reload();
                                 });
                             }
@@ -86,20 +54,97 @@
                         </script>
                     </div>
                 </div>
-                <div class="px-4 py-5 chat-box bg-white" style="height: 462px">
-
-                    @if (Veggie.Services.Storage.Instance.messages.Count != 0)
-                    {
-                        foreach (var item in Veggie.Services.Storage.Instance.messages)
+                <br />
+                <div class="messages-box"style="height: 524px">
+                    <div class="list-group rounded-0" id="user">
+                        @if (Veggie.Services.Storage.Instance.contacts.Count != 0)
                         {
-                            if (item.receivingUser == Veggie.Services.Storage.Instance.searchUsers.username)
+                            foreach (var item in Veggie.Services.Storage.Instance.contacts)
+                            {
+                                <a class="list-group-item list-group-item-success alert-success rounded-0" id="userCon">
+                                    <div class="media">
+                                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                        <div class="media-body ml-4">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <h6 class="mb-0" onclick="location.href='@Url.Action("getMessages", new { usernameS = item.username })'">@item.username</h6>
+                                            </div>
+                                            <p class="font-italic mb-0 text-small">@item.email</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Chat Box-->
+        <div class="col-7 px-0 py-0" style="top: 0px;">
+            <div class="bg-gray px-4 py-1 bg-light">
+                @if (Veggie.Services.Storage.Instance.actualConversation.sendUser != null) {
+                    <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.actualConversation.sendUser</p>
+                }else {
+                    <p class="h5 mb-0 py-1">Seleccione una conversación</p>
+                }
+            <form asp-action="searchMessage">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar mensaje" name="searchMessage" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-search" id="searchMessage" type="submit"></button>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="px-4 py-5 chat-box bg-white" style="height: 484px">
+
+
+                @if (Veggie.Services.Storage.Instance.messages.Count != 0)
+                {
+                    foreach (var item in Veggie.Services.Storage.Instance.messages)
+                    {
+                        if (item.messageSend.receivingUser == Veggie.Services.Storage.Instance.actualConversation.sendUser)
+                        {
+                            if (item.typeMessage == true)
                             {
                                 <div class="media w-50 ml-auto mb-3">
                                     <div class="media-body">
-                                        <div class="bg-primary rounded py-2 px-3 mb-2">
-                                            <p class="text-small mb-0 text-white">@item.message</p>
+                                        <div class="bg-success rounded py-2 px-3 mb-2">
+                                            <p class="text-small mb-0 text-white">@item.messageSend.message</p>
                                         </div>
-                                        <p class="small text-muted">@item.messageTime</p>
+                                        <p class="small text-muted">@item.messageSend.messageTime</p>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="media w-50 mb-3">
+                                    <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                    <div class="media-body ml-3">
+                                        <div class="bg-success rounded py-2 px-3 mb-2">
+                                            <form class="form-inline">
+                                                <div class="form-group mb-2">
+                                                    <p class="text-small mb-0 text-white">@item.fileSend.fileName</p>
+                                                    <button class="btn btn-light fa fa-file-download" onclick="location.href='@Url.Action("Download", new { fileId = item.fileSend._id})'" style="position:relative; left:120px" id="send" type="button"></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <p class="small text-muted">@item.messageSend.messageTime</p>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                        else
+                        {
+                            if (item.typeMessage == true)
+                            {
+                                <div class="media w-50 mb-3">
+                                    <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
+                                    <div class="media-body ml-3">
+                                        <div class="bg-light rounded py-2 px-3 mb-2">
+                                            <p class="text-small mb-0 text-muted">@item.messageSend.message</p>
+                                        </div>
+                                        <p class="small text-muted">@item.messageSend.messageTime</p>
                                     </div>
                                 </div>
                             }
@@ -109,48 +154,71 @@
                                     <img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
                                     <div class="media-body ml-3">
                                         <div class="bg-light rounded py-2 px-3 mb-2">
-                                            <p class="text-small mb-0 text-muted">@item.message</p>
+                                            <form class="form-inline">
+                                                <div class="form-group mb-2">
+                                                    <p class="text-small mb-0 text-muted">@item.fileSend.fileName</p>
+                                                    <button class="btn btn-light fa fa-file-download" style="position:relative; left:120px" id="send" type="button"></button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <p class="small text-muted">@item.messageTime</p>
+                                        <p class="small text-muted">@item.messageSend.messageTime</p>
                                     </div>
                                 </div>
                             }
                         }
                     }
+                }
 
+            </div>
+            <div class="collapse" style="position: absolute; top: 460px; left: 120px" id="collapseExample">
+                <div class="card card-body">
+                    <div class="input-group mb-3">
+                        @using (Html.BeginForm("sendM", "Chat", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="file" id="file" aria-describedby="inputGroupFileAddon01">
+                                <label class="custom-file-label" for="file">Archivo seleccionado...</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary fa fa-paper-plane" type="submit" id="button-addon2"></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <form action="#" class="bg-light">
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-light fa fa-redo-alt" id="refresh" type="button"></button>
+                    </div>
+                    <input type="text" placeholder="Escribe un mensaje" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
+                    <div class="input-group-append">
+                        <button class="btn btn-light fa fa-folder" id="upload" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></button>
+                        <button class="btn btn-light fa fa-paper-plane" id="send" type="button"></button>
+                    </div>
                 </div>
 
-                <form action="#" class="bg-light">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-light fa fa-redo-alt" id="refresh" type="button"></button>
-                        </div>
-                        <input type="text" placeholder="Escribe un mensaje" aria-describedby="button-addon2" id="message" class="form-control rounded-0 border-0 py-4 bg-light">
-                        <div class="input-group-append">
-                            <button class="btn btn-light fa fa-folder" id="send" type="button"></button>
-                            <button class="btn btn-light fa fa-paper-plane" id="send" type="button"></button>
-                        </div>
-                    </div>
-                </form>
-                <script type="text/javascript">
-                    $('#send').click(function () {
-                        var messa = $("#message").val();
-                        $.get("/Chat/SendMessage", { message: messa }, function (data) {
-                            location.reload();
-                        });
-                    }
-                    );
-                </script>
 
-                <script type="text/javascript">
-                    $('#refresh').click(function () {
-                        $.get("/Chat/refresh", { message: "." }, function (data) {
-                            location.reload();
-                        });
-                    }
-                    );
-                </script>
-            </div>
+            </form>
+            <script type="text/javascript">
+                $('#send').click(function () {
+                    var messa = $("#message").val();
+                    $.get("/Chat/SendMessage", { message: messa }, function (data) {
+                        location.reload();
+                    });
+                }
+                );
+            </script>
+
+            <script type="text/javascript">
+                $('#refresh').click(function () {
+                    $.get("/Chat/refresh", { message: "." }, function (data) {
+                        location.reload();
+                    });
+                }
+                );
+            </script>
         </div>
     </div>
-}
+</div>

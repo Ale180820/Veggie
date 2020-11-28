@@ -12,6 +12,7 @@ namespace VeggieBack.Models {
         public int firstKey { get; set; }
         public int secondKey { get; set; }
         public List<Message> messages { get; set; }
+        public List<File> path { get; set; }
 
         public Conversation() {
             var rand = new Random();
