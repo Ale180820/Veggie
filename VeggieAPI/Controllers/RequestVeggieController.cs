@@ -231,7 +231,8 @@ namespace VeggieAPI.Controllers {
             try{
                 var conversation = findConversationByIdConversation(find.idConversation);
                 foreach (Message message in conversation.messages){
-                    if (message.message.Contains(decryptionMessage(message, find.idConversation).message)){
+                    var mess = decryptionMessage(message, find.idConversation).message;
+                    if (mess.Contains(find.message)){
                         messages.Add(message);
                     }
                 }
