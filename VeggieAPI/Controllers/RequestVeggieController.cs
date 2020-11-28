@@ -219,12 +219,11 @@ namespace VeggieAPI.Controllers {
                         return StatusCode(500, "InternalServerError");
                     }
                 }
-                else
-                {
+                else {
                     FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
                     var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
                             Headers = new HeaderDictionary()
-                        };
+                    };
 
                     LZWCompressor compressor = new LZWCompressor();
                     compressor.Compress(formFile, routeDirectory);
@@ -232,16 +231,35 @@ namespace VeggieAPI.Controllers {
                 }
                 //Cambiar por lo del archivo
                 return StatusCode(500, "InternalServerError");
-                //}else {
-                //    //if () {
-
-                //    //}else {
-
-                //    //}
-                //}
+                
             } catch {
                 return StatusCode(500, "InternalServerError");
             }
+        }
+
+
+        [HttpPost("downloadM")]
+        public ActionResult downloadFile([FromBody] int fileId) {
+
+            //Agregar valores provenientes de la base de datos
+            string compressionPath = "";
+            string filename = "";
+
+            FileStream newfileStream = new FileStream(compressionPath, FileMode.OpenOrCreate);
+            var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), compressionPath) {
+                Headers = new HeaderDictionary()
+            };
+
+            LZWCompressor decompressor = new LZWCompressor();
+            var pathDecompressor = decompressor.Decompress(formFile, routeDirectory); 
+            byte[] newBytes = System.IO.File.ReadAllBytes(pathDecompressor);
+            DownloadFile downloadFile = new DownloadFile{
+                file = newBytes,
+                fileName = filename
+            };
+
+            return Ok(downloadFile);
+            
         }
 
         [HttpPost("getSpecificMessage")]
@@ -260,9 +278,6 @@ namespace VeggieAPI.Controllers {
                 return Ok(messages);
             }
         }
-
-        
-
 
         [HttpPost("getAllMessage")]
         public ActionResult getAllMessagesConversation([FromBody] int idConversation) {

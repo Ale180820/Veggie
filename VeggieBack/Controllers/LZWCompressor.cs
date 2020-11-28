@@ -170,7 +170,7 @@ namespace VeggieBack.Controllers {
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                using (var streamWriter = new FileStream(Path.Combine(routeDirectory, "decompress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt"), FileMode.OpenOrCreate))
+                using (var streamWriter = new FileStream(Path.Combine(routeDirectory, "decompress", Path.GetFileNameWithoutExtension(file.FileName)), FileMode.OpenOrCreate))
                 {
                     using (var writer = new BinaryWriter(streamWriter))
                     {

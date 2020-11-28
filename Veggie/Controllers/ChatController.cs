@@ -104,15 +104,20 @@ namespace Veggie.Controllers {
         }
         #endregion
 
-        //public ActionResult Download(string filename)
-        //{
-        //    var net = new System.Net.WebClient();
-        //    var data = net.DownloadData(link);
-        //    var content = new System.IO.MemoryStream(data);
-        //    var contentType = "APPLICATION/octet-stream";
-        //    var fileName = "something.bin";
-        //    return File(content, contentType, fileName);
-        //}
+        public FileResult Download(string fileId) {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(fileId);
+            var messageS = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            var response = APIConnection.WebApliClient.PostAsync("api/downloadM", messageS).Result;
+            if (response.IsSuccessStatusCode) {
+                var result = response.Content.ReadAsStringAsync().Result;
+                var search = JsonSerializer.Deserialize<DownloadFile>(result);
+                return File(search.file, System.Net.Mime.MediaTypeNames.Application.Octet, search.fileName);
+            }
+            else
+            {
+                return default;
+            }
+        }
         public Route route = new Route();
         public ChatController(IWebHostEnvironment env)
         {
@@ -136,8 +141,6 @@ namespace Veggie.Controllers {
                 fileKeys.Flush();
                 fileKeys.Close();
                 byte[] bytes = System.IO.File.ReadAllBytes(route.getRoute(file.FileName));
-                
-
 
                 DateTime now = DateTime.Now;
                 var messageFile = new Message
@@ -152,8 +155,6 @@ namespace Veggie.Controllers {
                     file = bytes,
                     fileName = file.FileName,
                 };
-
-                //fileInfo.assingName();
 
                 var messageSend = new SendMessage
                 {
@@ -200,7 +201,6 @@ namespace Veggie.Controllers {
                 if (response.IsSuccessStatusCode) {
                     refreshChat();
                 }
-                TempData["search"] = "...";
                 return RedirectToAction("Index", "Chat");
             }
             catch (Exception) {
@@ -239,8 +239,8 @@ namespace Veggie.Controllers {
                     var sendMessage = JsonSerializer.Deserialize<List<Message>>(result);
                     Storage.Instance.findMessages = sendMessage;
                 }
-                TempData["search"] = "...";
-                return RedirectToAction("FindMessages", "Chat");
+                TempData["Search"] = "...";
+                return RedirectToAction("Index", "Chat");
             }
             catch (Exception) {
                 TempData["smsFail"] = "...";

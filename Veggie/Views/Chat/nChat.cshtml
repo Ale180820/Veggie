@@ -14,7 +14,7 @@
 }
 @if (ViewBag.Search != null)
 {
-    <div class="alert alert-secondary alert-dismissible fade show col-5" style="position: absolute; top: 10px; left: 680px;" role="alert">
+    <div class="alert alert-secondary alert-dismissible fade show" style="position: relative; top: 10px; left: 10px;" role="alert">
         @if (Veggie.Services.Storage.Instance.findMessages.Count != 0)
         {
 
@@ -37,7 +37,6 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
@@ -48,9 +47,6 @@
         <div class="col-5 px-0">
             <div class="bg-white">
                 <div class="bg-white px-4 py-1 bg-light">
-                    <div class="brand-wrapper" style="left:95px; top:25px; position:relative;" height="20px">
-                        <img src="~/assets/img/Logo.png" alt="logo" class="logo">
-                    </div>
                     <p class="h5 mb-0 py-1">Conversaciones</p>
                     <div class="input-group my-2 my-lg-0">
                         <input type="text" class="form-control mr-sm-2" placeholder="Buscar contacto" id="username" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -61,6 +57,7 @@
                             $('#searchBar').click(function () {
                                 var username = $("#username").val();
                                 $.get("/Chat/SearchUser", { username: username }, function (data) {
+                                    location.reload();
                                 });
                             }
                             );
@@ -68,7 +65,7 @@
                     </div>
                 </div>
                 <br />
-                <div class="messages-box" style="height: 405px">
+                <div class="messages-box" style="">
                     <div class="list-group rounded-0" id="user">
                         @if (Veggie.Services.Storage.Instance.contacts.Count != 0)
                         {
@@ -102,22 +99,15 @@
                 {
                     <p class="h5 mb-0 py-1">Seleccione una conversación</p>
                 }
-
+            <form asp-action="searchMessage">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Buscar mensaje" id="messageS" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" placeholder="Buscar mensaje" name="searchMessage" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary fa fa-search" id="searchMessage" type="button"></button>
+                        <button class="btn btn-outline-secondary fa fa-search" id="searchMessage" type="submit"></button>
                     </div>
                 </div>
+            </form>
             </div>
-            <script type="text/javascript">
-                $('#searchMessage').click(function () {
-                    var messageSearch = $("#messageS").val();
-                    $.post("/Chat/searchMessage", { searchMessage: messageSearch }, function (data) {
-                    });
-                }
-                );
-            </script>
             <div class="px-4 py-5 chat-box bg-white" style="height: 484px">
 
 
@@ -147,7 +137,7 @@
                                             <form class="form-inline">
                                                 <div class="form-group mb-2">
                                                     <p class="text-small mb-0 text-white">@item.fileSend.fileName</p>
-                                                    <button class="btn btn-light fa fa-file-download" style="position:relative; left:120px" id="send" type="button"></button>
+                                                    <button class="btn btn-light fa fa-file-download" onclick="location.href='@Url.Action("Download", new { fileId = item.fileSend._id})'" style="position:relative; left:120px" id="send" type="button"></button>
                                                 </div>
                                             </form>
                                         </div>

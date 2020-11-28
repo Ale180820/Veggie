@@ -38,15 +38,6 @@
                                     <input type="password" name="password" id="password" class="form-control" placeholder="**********">
                                 </div>
                                 <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Ingresar">
-                                @*<script type="text/javascript">
-                                        $('#login').click(function () {
-                                            var emailx = $("#email").val();
-                                            $.get("/Home/GetID", { email: emailx }, function (data) {
-                                                sessionStorage.setItem("idUser", data)
-                                            });
-                                        }
-                                    );
-                                </script>*@
                             </form>
                             <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
                             <nav class="login-card-footer-nav">
