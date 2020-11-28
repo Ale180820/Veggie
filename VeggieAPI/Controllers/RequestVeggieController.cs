@@ -227,6 +227,9 @@ namespace VeggieAPI.Controllers {
                     LZWCompressor compressor = new LZWCompressor();
                     compressor.Compress(formFile, routeDirectory);
                     message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
+                    message.fileSend.fileName = formFile.FileName;
+                    return Ok();
+
                 }
                 //Cambiar por lo del archivo
                 return StatusCode(500, "InternalServerError");
