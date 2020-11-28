@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Veggie.Models;
-using Veggie.System;
+using Veggie.APISystem;
 using VeggieBack.Controllers;
 using VeggieBack.Models;
 using System.Text.Json;
@@ -47,7 +47,6 @@ namespace Veggie.Controllers {
                 var response = APIConnection.WebApliClient.PostAsync("api/login", user).Result;
                 if (response.IsSuccessStatusCode) {
                     fillConversations();
-                    List<Contacts> dd = Storage.Instance.contacts;
                     return RedirectToAction("Index", "Chat");
 
                 } else {

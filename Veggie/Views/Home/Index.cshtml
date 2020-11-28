@@ -42,11 +42,11 @@
                                         $('#login').click(function () {
                                             var emailx = $("#email").val();
                                             $.get("/Home/GetID", { email: emailx }, function (data) {
-                                                localStorage.setItem("idUser", data);
+                                                sessionStorage.setItem("idUser", data)
                                             });
                                         }
-                                        );
-                                    </script>*@
+                                    );
+                                </script>*@
                             </form>
                             <p class="login-card-footer-text">¿No tienes cuenta? <a asp-action="Create" asp-controller="Register" class="text-reset">Regístrarse</a></p>
                             <nav class="login-card-footer-nav">

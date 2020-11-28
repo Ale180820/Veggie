@@ -303,23 +303,71 @@ namespace VeggieAPI.Controllers {
         [HttpPost("sendMessage")]
         public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
+
                 if (message.typeMessage) {
-                    if (sendMessageInConversation(message)) {
+                    if (sendMessageInConversation(message)){
                         return Ok();
                     } else {
                         return StatusCode(500, "InternalServerError");
                     }
+
+                }else{
+                    try {
+                        string newPath = Path.GetFullPath("Documents\\" + message.fileSend.fileName);
+                        FileStream fileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                        BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+                        binaryWriter.Write(message.fileSend.file);
+                        binaryWriter.Close();
+                        fileStream.Close();
+
+                        FileStream newfileStream = new FileStream(newPath, FileMode.OpenOrCreate);
+                        var formFile = new FormFile(newfileStream, 0, newfileStream.Length, Path.GetFullPath("Documents\\"), message.fileSend.fileName) {
+                            Headers = new HeaderDictionary()
+                        };
+
+                        LZWCompressor compressor = new LZWCompressor();
+                        compressor.Compress(formFile, routeDirectory);
+                        message.fileSend.compressedFilePath = Path.Combine(routeDirectory, "compress", $"{formFile.FileName}.lzw");
+                        message.fileSend.fileName = formFile.FileName;
+                        return Ok();
+                    }catch {
+                        return StatusCode(500, "InternalServerError");
+                    }
                 }
-                //Cambiar por lo del archivo
-                return StatusCode(500, "InternalServerError");
-                //}else {
-                //    //if () {
-
-                //    //}else {
-
-                //    //}
-                //}
             } catch {
+                return StatusCode(500, "InternalServerError");
+            }
+        }
+
+        public bool insertFileInConversation(SendMessage message) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                conversation.path.Add(message.fileSend);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        [HttpPost("getFileByFileId")]
+        public ActionResult getFileByFileId(int fileId) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("path._id", fileId);
+                var result = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                foreach(VeggieBack.Models.File file in result.path) {
+                    if(file._id == fileId) {
+                        return Ok(file);
+                    }
+                }
+                return Ok();
+            }
+            catch {
                 return StatusCode(500, "InternalServerError");
             }
         }
@@ -398,6 +446,22 @@ namespace VeggieAPI.Controllers {
                 var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);    
                 return true;
             } catch {
+                return false;
+            }
+        }
+
+        public bool sendMessageFile(SendMessage message) {
+            try {
+                Models.MongoHelper.ConnectToMongoService();
+                Models.MongoHelper.conversations_collection = Models.MongoHelper.database.GetCollection<VeggieBack.Models.Conversation>("conversation");
+                var filter = Builders<VeggieBack.Models.Conversation>.Filter.Eq("_id", message.idConversation);
+                var conversation = Models.MongoHelper.conversations_collection.Find(filter).FirstOrDefault();
+                conversation.path.Add(message.fileSend);
+                var update = Builders<VeggieBack.Models.Conversation>.Update.Set("messages", conversation.messages);
+                var resultOperation = Models.MongoHelper.conversations_collection.UpdateOneAsync(filter, update);
+                return true;
+            }
+            catch {
                 return false;
             }
         }
