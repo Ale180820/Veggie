@@ -21,7 +21,6 @@ namespace VeggieAPI.Controllers {
             return Ok();
         }
 
-        #region Methods for user processes
         [HttpPost("createUser")]
         public ActionResult createUser([FromBody] User user) {
             if (user.nameUser != null) {
@@ -74,7 +73,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region [User] Methods for communication with the database
         public bool createNewUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -117,12 +115,7 @@ namespace VeggieAPI.Controllers {
                 return null;
             }
         }
-        #endregion
 
-
-        #endregion
-
-        #region Methods for login processes
         [HttpPost("login")]
         public ActionResult login([FromBody] User user) {
             if (user.emailUser != null) {
@@ -136,7 +129,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region Internal process
         public bool loginUser(User user) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -155,10 +147,6 @@ namespace VeggieAPI.Controllers {
                 return false;
             }
         }
-        #endregion
-        #endregion
-
-        #region Methods for conversation process
 
         [HttpPost("createConversation")]
         public ActionResult createConversation([FromBody] Entry userConversation){
@@ -216,7 +204,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region Internal process
         public List<Message> findConversationById(int idConversation){
             try{
                 Models.MongoHelper.ConnectToMongoService();
@@ -295,11 +282,7 @@ namespace VeggieAPI.Controllers {
                 return false;
             }
         }
-        #endregion
 
-        #endregion
-
-        #region Methods for messages process
         [HttpPost("sendMessage")]
         public ActionResult sendMessage([FromBody] SendMessage message) {
             try {
@@ -455,7 +438,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-        #region Internal methods
         public bool sendMessageInConversation(SendMessage message) {
             try {
                 Models.MongoHelper.ConnectToMongoService();
@@ -509,8 +491,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-
-        #region Encryption
         public List<Message> decryptionMessages(List<Message> messages, int idConversation){
             List<Message> decryptMessage = new List<Message>();
             Models.MongoHelper.ConnectToMongoService();
@@ -542,11 +522,7 @@ namespace VeggieAPI.Controllers {
             }
 
         }
-        #endregion
-        #endregion
-        #endregion
 
-        #region Send file methods
         /// <summary>
         /// Method to get the file sent
         /// </summary>
@@ -577,7 +553,6 @@ namespace VeggieAPI.Controllers {
             }
         }
 
-
         /// <summary>
         /// Method to build the returnable file
         /// </summary>
@@ -595,8 +570,5 @@ namespace VeggieAPI.Controllers {
         public ActionResult ReturnTextFile([FromForm] IFormFile file){
             return PhysicalFile(Path.Combine(routeDirectory, "decompress", $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt"), MediaTypeNames.Text.Plain, $"{Path.GetFileNameWithoutExtension(file.FileName)}.txt");
         }
-        #endregion
-
     }
 }
-
