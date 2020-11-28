@@ -47,7 +47,6 @@ namespace Veggie.Controllers {
                 var response = APIConnection.WebApliClient.PostAsync("api/login", user).Result;
                 if (response.IsSuccessStatusCode) {
                     fillConversations();
-                    List<Contacts> dd = Storage.Instance.contacts;
                     return RedirectToAction("Index", "Chat");
 
                 } else {
