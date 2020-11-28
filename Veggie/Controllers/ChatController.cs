@@ -20,8 +20,9 @@ namespace Veggie.Controllers {
             if (TempData["smsFail"] != null) {
                 ViewBag.Message = "Ha ocurrido un error en la ejecución, intentelo nuevamente.";
             }
-            if (TempData["Search"] != null)
-            {
+
+            if (TempData["search"] != null) {
+                ViewBag.Message = "Encontrado";
                 ViewBag.Search = "Encontrado";
             }
             return View("nChat");
@@ -143,14 +144,14 @@ namespace Veggie.Controllers {
                 byte[] bytes = System.IO.File.ReadAllBytes(route.getRoute(file.FileName));
 
                 DateTime now = DateTime.Now;
-                var messageFile = new Message
-                {
+                var messageFile = new Message {
                     receivingUser = Storage.Instance.actualConversation.sendUser,
                     sendingUser = Storage.Instance.idUser.ToString(),
                     message = "",
                     typeMessage = false,
                     messageTime = now,
                 };
+
                 var fileInfo = new VeggieBack.Models.File {
                     file = bytes,
                     fileName = file.FileName,

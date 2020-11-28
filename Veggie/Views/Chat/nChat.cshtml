@@ -17,10 +17,8 @@
     <div class="alert alert-secondary alert-dismissible fade show" style="position: relative; top: 10px; left: 10px;" role="alert">
         @if (Veggie.Services.Storage.Instance.findMessages.Count != 0)
         {
-
             <div class="card-body">
-                @foreach (var item in Veggie.Services.Storage.Instance.findMessages)
-                {
+                @foreach (var item in Veggie.Services.Storage.Instance.findMessages) {
                     <form>
                         <div class="form-group row">
                             <label for="staticEmail" class="col-sm-2 col-form-label">Enviado por: @item.receivingUser</label>
@@ -38,6 +36,7 @@
         </button>
     </div>
 }
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" href="~/lib/chat-style/chatN.css" />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -91,12 +90,9 @@
         <!-- Chat Box-->
         <div class="col-7 px-0 py-0" style="top: 0px;">
             <div class="bg-gray px-4 py-1 bg-light">
-                @if (Veggie.Services.Storage.Instance.actualConversation.sendUser != null)
-                {
+                @if (Veggie.Services.Storage.Instance.actualConversation.sendUser != null) {
                     <p class="h5 mb-0 py-1">@Veggie.Services.Storage.Instance.actualConversation.sendUser</p>
-                }
-                else
-                {
+                }else {
                     <p class="h5 mb-0 py-1">Seleccione una conversación</p>
                 }
             <form asp-action="searchMessage">
@@ -190,7 +186,7 @@
                         {
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="file" id="file" aria-describedby="inputGroupFileAddon01">
-                                <label class="custom-file-label" for="file">Elige un archivo</label>
+                                <label class="custom-file-label" for="file">Archivo seleccionado...</label>
                             </div>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary fa fa-paper-plane" type="submit" id="button-addon2"></button>
